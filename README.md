@@ -1,4 +1,4 @@
 drivegal
 ========
 
-Photo Gallery for Google Drive
+A photo gallery for Google Drive, accessible at http://drivegal.com
