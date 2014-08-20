@@ -1,0 +1,13 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+        <h1>Error {{ code }}</h1>
+
+        <p>
+            {% if message is defined %}
+                {{ message }}
+            {% else %}
+                An error occurred on the server.
+            {% endif %}
+        </p>
+{% endblock %}

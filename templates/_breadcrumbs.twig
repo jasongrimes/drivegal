@@ -1,0 +1,7 @@
+<h3>
+    {% for path,name in breadcrumbs %}
+        <a href="{{ app.request.baseurl }}/{{ path }}">{{ name }}</a>
+        <span class="text-muted" style="font-weight: normal;">/</span>
+    {% endfor %}
+    <strong>{{ albumTitle }}</strong>
+</h3>

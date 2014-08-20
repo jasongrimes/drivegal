@@ -1,0 +1,91 @@
+h1, h2, h3 {
+    margin-top: 0px;
+}
+div.thumbnail {
+    display: inline-table;
+    height: 210px;
+    width: 230px;
+    vertical-align: bottom;
+    position: relative;
+}
+.thumbnail .img-container {
+    display: table-cell;
+    width: 220px;
+    height: 165px;
+    vertical-align: middle;
+    text-align: center;
+}
+.thumbnail img {
+    max-height: 165px;
+    max-width: 220px;
+    overflow: hidden;
+}
+.thumbnail .caption {
+    color: #777;
+    position: absolute;
+    bottom: 0px;
+}
+.thumbnail .caption.truncate {
+    width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.thumbnail a:hover {
+    text-decoration: none;
+}
+.thumbnail .play-button {
+    display: none;
+}
+.thumbnail.movie .play-button {
+    display: block;
+    position: absolute;
+    top: 43%;
+    right: 0;
+    left: 0;
+    margin: -64px auto 0;
+    width: 128px;
+    height: 128px;
+    background: url(/js/lib/blueimp-gallery/img/video-play.png) center no-repeat;
+    opacity: .6;
+    cursor: pointer;
+}
+.thumbnail.movie .play-button:hover {
+    opacity: 1;
+}
+.subalbum {
+    display: inline-block;
+    margin: 20px 40px 20px 0px;
+    width: 100px;
+}
+.subalbum .caption {
+    text-align: center;
+}
+.blueimp-gallery > .caption {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    margin: 0 40px 0 0;
+    color: #fff;
+    text-shadow: 0 0 2px #000;
+    opacity: .8;
+    display: none;
+}
+.blueimp-gallery-controls > .caption {
+    display: block;
+    font-size: 18px;
+}
+.blueimp-gallery > .caption .title {
+    position: relative;
+    margin: auto;
+    font-size: 22px
+}
+.blueimp-gallery > .caption .date,
+.blueimp-gallery > .caption .camera
+{
+    font-size: 14px;
+    opacity: .6;
+}
+.blueimp-gallery > .caption p {
+    margin: 0px;
+}

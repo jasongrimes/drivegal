@@ -1,0 +1,10 @@
+{% extends "layout.twig" %}
+
+{% block title %}{{ galleryName }}{% endblock %}
+
+{% block content %}
+    <h3>{{ galleryName }}</h3>
+
+    {% include '_subalbums.twig' %}
+
+{% endblock %}

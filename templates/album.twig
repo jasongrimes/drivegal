@@ -1,0 +1,106 @@
+{% extends "layout.twig" %}
+
+{% block title %}{{ albumTitle }} | {{ galleryName }}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="/js/lib/blueimp-gallery/css/blueimp-gallery.min.css">
+{% endblock %}
+
+{% block content %}
+
+    {% include '_breadcrumbs.twig' %}
+
+    {% include '_subalbums.twig' %}
+
+    <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <div class="caption">
+            <h3 class="title"></h3>
+            <p class="description"></p>
+            <p class="date"></p>
+            <p class="camera"></p>
+        </div>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator hidden-xs"></ol>
+    </div>
+
+    <div id="thumbnails">
+        {% for file in files %}
+            {% set caption = file.caption|replace("\\n", " ") %}
+            <div class="thumbnail {{ file.type }}">
+                <a
+                    {% if file.type == "movie" %}
+                        href="{{ file.playUrl }}"
+                        type="text/html"
+                        data-poster="{{ file.bigThumbnailUrl }}"
+                        data-iframevid="{{ file.playUrl }}"
+                    {% else %}
+                        href="{{ file.bigThumbnailUrl }}"
+                        type="{{ file.mimeType }}"
+                        data-camera="{{ file.cameraMake }} {{ file.cameraModel }}"
+                    {% endif %}
+                    title="{{ caption }}"
+                    data-title="{{ file.title }}"
+                    data-description="{{ file.description }}"
+                    data-date="{{ file.date }}"
+                >
+                    <div class="img-container">
+                        <img src="{{ file.thumbnailUrl }}">
+                        <div class="play-button"></div>
+                    </div>
+                    <div class="caption truncate">
+                        {{ caption }}
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script src="/js/lib/blueimp-gallery/js/blueimp-gallery.min.js"></script>
+    <script src="/js/blueimp-gallery-iframevid.js"></script>
+    <script src="/js/lib/moment/moment.js"></script>
+
+    <script>
+        document.getElementById('thumbnails').onclick = function (event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement,
+                link = $(target).closest('a')[0],
+                links = this.getElementsByTagName('a');
+            if (!link) return;
+            blueimp.Gallery(links, {
+                index: link,
+                event: event,
+                onslide: function (index, slide) {
+                    var details = {
+                        'data-description': '.description',
+                        'data-title': '.title',
+                        'data-date': '.date',
+                        'data-camera': '.camera'
+                    }, attr, classname, text, node;
+                    for (attr in details) {
+                        if (!details.hasOwnProperty(attr)) continue;
+                        classname = details[attr];
+                        text = this.list[index].getAttribute(attr);
+                        node = this.container.find(classname);
+                        node.empty();
+                        if (text) {
+                            if (attr == 'data-date') {
+                                // The .zone(text) part prevents conversion into the local timezone, showing it in the camera's local time instead.
+                                text = moment(text).zone(text).format('LLL');
+                            }
+                            node[0].appendChild(document.createTextNode(text));
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+
+{% endblock %}

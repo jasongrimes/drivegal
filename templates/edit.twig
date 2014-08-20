@@ -1,0 +1,22 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+    {% if app.session.getFlashBag.get('just-connected') %}
+        <div class="alert alert-success" role="alert">
+            <p>
+                <strong>OK!</strong>
+                We've successfully connected to your Google Drive account.
+                If you like, you can edit your gallery's URL below.
+            </p>
+            <p>
+                Or, <a href="/{{ gallery.slug }}">just check out your gallery now!</a>.
+            </p>
+        </div>
+    {% endif %}
+
+    <h1>Edit information about your gallery</h1>
+
+    <div>
+        form will go here...
+    </div>
+{% endblock %}

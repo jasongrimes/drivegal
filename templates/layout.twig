@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title '' %} | Photo Gallery for Google Drive</title>
+
+        <link rel="stylesheet" href="/css/lib/bootstrap.readable/bootstrap.min.css">
+        <link href="{{ app.request.basepath }}/css/main.css" rel="stylesheet" type="text/css" />
+
+        {% block css '' %}
+
+        <!--script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script-->
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/" style="margin-top: -5px;">
+                        <img src="/img/drivegal-logo-128.png" style="float: left; width: 45px; margin: -5px 5px 0px 0px;">
+                        <div style="float: left; margin-top: -2px; color: #666;">
+                            <div style="font-weight: bold; font-size: 24px;">Photo Gallery</div>
+                            <div style="font-size: 14px;">for Google Drive</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">About</a></li>
+                        <li><a href="/connect">Create Gallery</a></li>
+                        <!--li><a href="/login">Sign in</a></li-->
+                        <!--
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </li>
+                        -->
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="container-fluid">
+            {% if app.session.getFlashBag.peek('success') %}
+                <div class="alert alert-success" role="alert">
+                    <strong>OK!</strong> {% for msg in app.session.getFlashBag.get('success') %}{{ msg }}<br/>{% endfor %}
+                </div>
+            {% endif %}
+
+            {% if app.session.getFlashBag.peek('error') %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error: </strong> {% for error in app.session.getFlashBag.get('error') %}{{ error }}<br/>{% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+        <script src="/js/lib/jquery/jquery-1.11.1.min.js"></script>
+        <script src="/css/lib/bootstrap/js/bootstrap.js"></script>
+
+        {% block footer '' %}
+    </body>
+</html>
