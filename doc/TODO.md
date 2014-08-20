@@ -12,7 +12,7 @@ Make a personal service:
     - [x] Refactor into something maintainable. (Stop including email in auth url, ...)
 * [x] Make a web page for browsing folders and image lists 
 * [x] Make a lightbox work with the image list
-* [ ] Tweak the UI to look how I want it
+* [x] Tweak the UI to look how I want it
     - [x] Try another gallery, maybe https://github.com/blueimp/Gallery
     - [x] Make videos work
     - [x] Make thumbnails look good
@@ -28,10 +28,11 @@ Make a personal service:
 * [x] Fix twig's inability to load error pages (causing fatal error when attempting to return a 404 etc.)
 * [x] Fix bug creating a new gallery
 * [x] Prevent creating galleries with duplicate names.
-* [ ] Import project to Github
+* [x] Import project to Github
 * [ ] Create the homepage
-    - [] Fix the title
-    - [] Maybe a nice parallax landing page?
+    - [x] Fix the title
+    - [x] Maybe a nice parallax landing page?
+    - [ ] Mobile homepage
 * [ ] Give helpful messages when needed
     - [] When viewing a gallery with revoked permissions
     - [] When a gallery has no albums
@@ -64,6 +65,7 @@ Other possible features:
     - Set created time based on EXIF data or vice versa.
     - Hazel-like features: organize incoming photos by date and/or exif data (date, location, which camera took it, etc.)
     - Auto-tag with face recognition
+* Let users subscribe to get a notification when a gallery is updated (ex. for Grandma).
 
 
 Notes on EXIF data:
