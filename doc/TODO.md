@@ -32,7 +32,7 @@ Make a personal service:
 * [ ] Create the homepage
     - [x] Fix the title
     - [x] Maybe a nice parallax landing page?
-    - [ ] Mobile homepage
+    - [x] Mobile homepage
 * [ ] Give helpful messages when needed
     - [] When viewing a gallery with revoked permissions
     - [] When a gallery has no albums

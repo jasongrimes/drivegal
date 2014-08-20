@@ -124,7 +124,8 @@ h2 {
 	background: url('../img/ico_loading.gif') no-repeat center center;
 }
 section {
-	min-width: 960px;
+	/*min-width: 960px;*/
+    height: 360px;
 	opacity: 0;
 }
 .loaded section,
@@ -146,37 +147,57 @@ main {
 	left: 0;
 }
 .bcg {
+    /*
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
+	*/
 	background-size: cover;
 	height: 100%;
 	width: 100%;
 }
 
+/* this aligns the content 150px up from the middle */
 .hsContainer {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	position: relative;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .hsContent {
+    /*
 	max-width: 700px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
+	*/
+    max-width: 80%;
+    margin: -150px auto 0 auto;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 8%;
+    text-align: center;
+    position: relative;
 }
 	.hsContent h2  {
 		color: #fff8de;
 		background-color: rgba(0,0,0,0.5);
 		padding: 10px 5px;
+        font-size: 20px;
+        line-height: 23px;
+        margin-bottom: 12px;
+        /*
 		font-size: 35px;
 		line-height: 38px;
 		margin-bottom: 12px;
+		*/
 	}
 	.hsContent p {
-		width: 400px;
+		/*width: 400px; */
+        width: 80%;
 		color: #b2b2b2;
 	}
 	.hsContent a {
@@ -187,14 +208,20 @@ main {
 /* Slide 1 */
 #slide-1 .bcg {background-image:url('../img/bcg_slide-1.jpg')}
 #slide-1 .hsContent {
-    margin-left: -350px;
-	bottom: 275px;
-	top: auto;
+    left: 0;
 }
 #slide-1 h2 {
-    white-space: nowrap;
     color: #333;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image:url('/img/drivegal-logo-128.png');
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    text-align: left;
+    padding: 10px 10px 0px 70px;
+    height: 55px;
+}
+#slide-1 h2 small {
+    display: block;
 }
 
 /* Slide 2 */
@@ -204,7 +231,7 @@ main {
     top: auto;
 }
 #slide-2 h2 {
-    position: fixed;
+    /*position: fixed;*/
     /* top: 40%; */
     top: 70%;
 }
@@ -225,21 +252,32 @@ main {
     top: auto;
 }
 #slide-4 h2 {
-    position: fixed;
+    /*position: fixed;*/
     top: 70%;
 }
 
 /* Slide 5 */
 #slide-5 .bcg {background-image:url('../img/bcg_slide-5.jpg')}
 #slide-5 .hsContent {
-    margin-left: -450px;
-    position: fixed;
-    top: 250px;
+    /*margin-left: -450px;*/
+    /*position: fixed;*/
+    top: auto;
+    text-align: left;
 }
 #slide-5 h2 {
     background: none;
     padding-left: 0;
     padding-right: 0;
+}
+#slide-5 ul {
+    margin: 0px 0px 20px 0px;
+    background: rgba(0,0,0,0.6);
+    padding: 5px 0px 5px 10px;
+    color: #fff8de;
+    list-style: none;
+}
+#slide-5 ul li {
+    margin-bottom: 5px;
 }
 /* ==========================================================================
    Helper classes
@@ -347,9 +385,119 @@ main {
    These examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
 
-@media only screen and (min-width: 35em) {
-    /* Style adjustments for viewports that meet the condition */
+    body, html {
+        height: auto;
+    }
+    .bcg {
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+    }
+    section {
+        min-width: 768px;
+        height: 600px;
+    }
+    .hsContainer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .hsContent {
+        max-width: 700px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        text-align: left;
+        padding: 0;
+    }
+    .hsContent h2  {
+        font-size: 35px;
+        line-height: 38px;
+    }
+    .hsContent p {
+        width: 400px;
+    }
+
+    #slide-1 .hsContent {
+        left: 10%;
+    }
+    #slide-1 h2 {
+        color: #333;
+        background-color: rgba(255, 255, 255, 0.9);
+        background-image:url('/img/drivegal-logo-128.png');
+        background-repeat: no-repeat;
+        background-size: 128px 128px;
+        padding: 30px 20px 0px 130px;
+        height: 110px;
+        font-size: 35px;
+        text-align: left;
+        line-height: 1em;
+    }
+    #slide-1 h2 small {
+        display: block;
+        font-size: 22px;
+    }
+    #slide-2 .hsContent {
+        top: 70%;
+        /*
+        margin-left: -340px;
+        top: auto;
+        */
+    }
+    #slide-2 h2 {
+        /*
+        position: fixed;
+        top: 70%;
+        */
+    }
+    #slide-3 .hsContent {
+        top: 70%;
+        /* margin-left: -300px; */
+    }
+    #slide-4 .hsContent {
+        top: 70%;
+        /*
+        margin-left: -340px;
+        position: fixed;
+        */
+    }
+    #slide-4 h2 {
+        /* background: none; */
+    }
+
+    /* Slide 5 */
+    #slide-5 .bcg {
+        /*
+        background-image:url('../img/bcg_slide-5.jpg');
+        background-position: center center;
+        */
+    }
+    #slide-5 .hsContent {
+        top: 70%;
+        left: 10%;
+    }
+    #slide-5 h2 {
+        /*
+        padding-left: 0;
+        padding-right: 0;
+        */
+    }
+    #slide-5 ul {
+        /*
+        margin: 0px 0px 25px 0px;
+        background: rgba(0,0,0,0.6);
+        padding: 10px 0px 10px 40px;
+        */
+        padding: 10px 10px 5px 20px;
+    }
+
 }
 
 @media print,
