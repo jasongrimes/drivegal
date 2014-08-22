@@ -89,3 +89,6 @@ div.thumbnail {
 .blueimp-gallery > .caption p {
     margin: 0px;
 }
+ol.double-spaced li {
+    margin-bottom: 20px;
+}

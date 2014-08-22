@@ -45,7 +45,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/" style="margin-top: -5px;">
+                    <a class="navbar-brand" href="{{ path('homepage') }}" style="margin-top: -5px;">
                         <img src="/img/drivegal-logo-128.png" style="float: left; width: 45px; margin: -5px 5px 0px 0px;">
                         <div style="float: left; margin-top: -2px; color: #666;">
                             <div style="font-weight: bold; font-size: 24px;">Photo Gallery</div>
@@ -57,9 +57,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/">About</a></li>
-                        <li><a href="/connect">Create Gallery</a></li>
-                        <!--li><a href="/login">Sign in</a></li-->
+                        <li><a href="{{ path('homepage') }}">About</a></li>
+                        <li><a href="{{ path('setup') }}">Create Gallery</a></li>
+                        {# <li><a href="{{ path('login') }}">Sign in</a></li> #}
                         <!--
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>

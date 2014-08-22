@@ -29,16 +29,20 @@ Make a personal service:
 * [x] Fix bug creating a new gallery
 * [x] Prevent creating galleries with duplicate names.
 * [x] Import project to Github
-* [ ] Create the homepage
+* [x] Create the homepage
     - [x] Fix the title
     - [x] Maybe a nice parallax landing page?
     - [x] Mobile homepage
+* [x] Improve the setup page
 * [ ] Give helpful messages when needed
+    - [] When clicking "cancel" on the oauth page.
     - [] When viewing a gallery with revoked permissions
     - [] When a gallery has no albums
     - [] When an album has no photos
+    - [] Album 404 should redirect to main gallery page
 * [ ] Add code comments
-* [ ] Improve the setup page
+* [ ] Add a footer
+* [ ] Add an about page
 * [ ] Tweak behavior to fit our photo workflow
 * [ ] Be smarter about the title. Consider that a good workflow is to name the file for the title. Hide the file extension if it's at the end of the title. If the title is `IMG_*.{extension}`, hide it altogether. Use the date for the caption if there's no title or description.
 * [ ] Use it
@@ -50,6 +54,7 @@ Make a personal service:
 
 Make a public service:
 
+* Add a copyright notice and privacy policy
 * Release it and promote it
 * Write articles about photo workflow and portability
 
@@ -59,14 +64,15 @@ Other possible features:
   See https://developers.facebook.com/docs/graph-api/reference/v2.1/user/albums#publish
   and https://developers.facebook.com/docs/graph-api/reference/v2.1/album/photos#publish 
 * Link to social shared copies of photos/albums, maybe even showing the discussions inline?
-* Agent for managing photos--probably a separate service from the gallery.
+* Agent for organizing photos--probably a separate service from the gallery.
     - EXIF editor
     - Set Google Drive description or title to EXIF/IPTC description or title, or vice versa.
     - Set created time based on EXIF data or vice versa.
     - Hazel-like features: organize incoming photos by date and/or exif data (date, location, which camera took it, etc.)
     - Auto-tag with face recognition
-* Let users subscribe to get a notification when a gallery is updated (ex. for Grandma).
-
+* Notification service: Let users subscribe to get an email when a gallery is updated (ex. for Grandma).
+* Make a view for showing recently updated photos.
+* Search within gallery
 
 Notes on EXIF data:
 

@@ -90,9 +90,11 @@ $app->get('/', function () use ($app) {
 //
 // Controller: Connect to a Google Drive account (to set up a gallery)
 //
-$app->get('/connect', function() use ($app) {
-    return $app['twig']->render('new.twig', array('auth_url' => $app['authenticator']->getAuthUrl()));
-});
+$app->get('/setup', function() use ($app) {
+    return $app['twig']->render('setup.twig', array('auth_url' => $app['authenticator']->getAuthUrl()));
+})
+->bind('setup')
+;
 
 
 // Controller: Handle OAuth redirects from Google.
@@ -105,7 +107,7 @@ $app->get('/oauth', function(Application $app, Request $request) {
         return $app->redirect('/' . $auth_result['galleryInfo']->getSlug());
     } else {
         $app['session']->getFlashBag()->add('error', $auth_result['error']);
-        return $app->redirect('/connect');
+        return $app->redirect($app['url_generator']->generate('setup'));
     }
 });
 
