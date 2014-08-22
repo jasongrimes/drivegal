@@ -5,8 +5,8 @@ Setup log for gdrivegallery
 
 ## Configure Apache
 
-    vim /etc/apache2/sites-available/gdrivegallery.conf
-    a2ensite gdrivegallery
+    vim /etc/apache2/sites-available/drivegal.conf
+    a2ensite drivegal
     service apache2 restart
 
 ## Install composer
@@ -17,12 +17,12 @@ Setup log for gdrivegallery
 # Install silex skeleton
 
     cd
-    composer create-project fabpot/silex-skeleton ./gdrivegallery
-    sudo mv gdrivegallery /var/www/
+    composer create-project fabpot/silex-skeleton ./drivegal
+    sudo mv drivegal /var/www/
 
 Tweak the silex skeleton.
 
-    cd /var/www/gdrivegallery
+    cd /var/www/drivegal
     mkdir -p doc/silex-skeleton web/js/lib web/img web/css
     mv LICENSE doc/silex-skeleton/
     sudo chown -R www-data var
