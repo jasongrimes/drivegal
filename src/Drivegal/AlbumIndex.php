@@ -18,6 +18,10 @@ class AlbumIndex
     /** @var Album[] */
     protected $orphans = array();
 
+    /**
+     * Index the albums.
+     * This must be run manually; the albums aren't indexed as they are added.
+     */
     public function buildIndex()
     {
         // Build family trees for album/folder hierarchies.
@@ -155,6 +159,4 @@ class AlbumIndex
 
         return null;
     }
-
-
 }

@@ -18,6 +18,13 @@ class Authenticator
     protected $redirect_uri;
     protected $scopes;
 
+    /**
+     * @param GalleryInfoMapper $galleryInfoMapper
+     * @param string $client_id
+     * @param string $client_secret
+     * @param string $redirect_uri
+     * @param array $scopes
+     */
     public function __construct(GalleryInfoMapper $galleryInfoMapper, $client_id, $client_secret, $redirect_uri, array $scopes)
     {
         $this->galleryInfoMapper = $galleryInfoMapper;
@@ -27,6 +34,10 @@ class Authenticator
         $this->scopes = $scopes;
     }
 
+    /**
+     * @param string|null $state
+     * @return string
+     */
     public function getAuthUrl($state = null)
     {
         $client = $this->createClient();
@@ -37,6 +48,9 @@ class Authenticator
         return $client->createAuthUrl();
     }
 
+    /**
+     * @return Google_Client
+     */
     public function createClient()
     {
         $client = new Google_Client();
@@ -52,6 +66,10 @@ class Authenticator
         return $client;
     }
 
+    /**
+     * @param string $auth_code
+     * @return array An array of result data, in the form array(success => true|false, error => {error message})
+     */
     public function authorizeGallery($auth_code)
     {
         try {
@@ -104,6 +122,10 @@ class Authenticator
         return $user_info_service->userinfo->get();
     }
 
+    /**
+     * @param Google_Service_Oauth2_Userinfoplus $user_info
+     * @return GalleryInfo
+     */
     protected function createGalleryInfoFromUserInfo(Google_Service_Oauth2_Userinfoplus $user_info)
     {
 

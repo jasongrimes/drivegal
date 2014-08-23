@@ -9,6 +9,9 @@ class GalleryInfoMapper
     /** @var Slugify */
     protected $slugify;
 
+    /**
+     * @param Slugify $slugify
+     */
     public function __construct(Slugify $slugify)
     {
         $this->slugify = $slugify;

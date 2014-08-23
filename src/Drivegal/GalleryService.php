@@ -27,6 +27,11 @@ class GalleryService
     /** @var Slugify */
     protected $slugify;
 
+    /**
+     * @param Authenticator $authenticator
+     * @param GalleryInfoMapper $galleryInfoMapper
+     * @param Slugify $slugify
+     */
     public function __construct(Authenticator $authenticator, GalleryInfoMapper $galleryInfoMapper, Slugify $slugify)
     {
         $this->authenticator = $authenticator;
@@ -171,6 +176,10 @@ class GalleryService
         return $albumIndex;
     }
 
+    /**
+     * @param Google_Service_Drive_DriveFile $folder
+     * @return Album
+     */
     protected function createAlbumFromDriveFolder(Google_Service_Drive_DriveFile $folder)
     {
         $album = new Album(
@@ -194,7 +203,10 @@ class GalleryService
         return $this->slugify->slugify($name);
     }
 
-
+    /**
+     * @param Google_Service_Drive_DriveFile $file
+     * @return array
+     */
     protected function getParentIdsFromDriveFile(Google_Service_Drive_DriveFile $file)
     {
         $parentIds = array();
@@ -241,6 +253,7 @@ class GalleryService
 
     /**
      * @param Google_Service_Drive_DriveFile $driveFile
+     * @param Album $album
      * @return GalleryFile|null
      */
     protected function createGalleryFileFromDriveFile(Google_Service_Drive_DriveFile $driveFile, Album $album)
@@ -290,11 +303,22 @@ class GalleryService
         return $galleryFile;
     }
 
+    /**
+     * Modify a DriveFile thumbnailLink to request a thumbnail of the given size.
+     *
+     * @param string $link
+     * @param string $new_size
+     * @return string
+     */
     protected function changeThumbnailLinkSize($link, $new_size)
     {
         return preg_replace('/=s\d+$/', '=s' . $new_size, $link);
     }
 
+    /**
+     * @param GalleryInfo $galleryInfo
+     * @return Google_Service_Drive
+     */
     protected function createDriveService(GalleryInfo $galleryInfo)
     {
         $client = $this->authenticator->createClient();
