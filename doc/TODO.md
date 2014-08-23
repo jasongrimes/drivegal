@@ -41,7 +41,7 @@ Make a personal service:
     - [x] When a gallery has no albums
     - [x] When an album has no photos
     - [x] Album 404 should redirect to main gallery page
-* [ ] Add code comments
+* [x] Add code comments
 * [ ] Add login support (with Google oauth)
 * [ ] Allow to manage an existing gallery.
 * [ ] Add DB support
