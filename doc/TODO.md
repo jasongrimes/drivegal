@@ -34,21 +34,21 @@ Make a personal service:
     - [x] Maybe a nice parallax landing page?
     - [x] Mobile homepage
 * [x] Improve the setup page
-* [ ] Give helpful messages when needed
-    - [] When clicking "cancel" on the oauth page.
-    - [] When viewing a gallery with revoked permissions
-    - [] When a gallery has no albums
-    - [] When an album has no photos
-    - [] Album 404 should redirect to main gallery page
+* [x] Add a footer
+* [x] Give helpful messages when needed
+    - [x] When clicking "cancel" on the oauth page.
+    - [x] When viewing a gallery with revoked permissions
+    - [x] When a gallery has no albums
+    - [x] When an album has no photos
+    - [x] Album 404 should redirect to main gallery page
 * [ ] Add code comments
-* [ ] Add a footer
+* [ ] Add login support (with Google oauth)
+* [ ] Allow to manage an existing gallery.
+* [ ] Add DB support
 * [ ] Add an about page
 * [ ] Tweak behavior to fit our photo workflow
 * [ ] Be smarter about the title. Consider that a good workflow is to name the file for the title. Hide the file extension if it's at the end of the title. If the title is `IMG_*.{extension}`, hide it altogether. Use the date for the caption if there's no title or description.
 * [ ] Use it
-* [ ] Add login support (with Google oauth)
-* [ ] Allow to manage an existing gallery.
-* [ ] Add DB support
 * [ ] Set up a reserved EC2 instance to keep costs down.
 * [ ] Figure out how to close/slide after viewing a video on mobile. (Need to leave some free space around a border for the touch gestures?)
 

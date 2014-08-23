@@ -5,6 +5,13 @@
 {% block content %}
     <h3>{{ galleryName }}</h3>
 
-    {% include '_subalbums.twig' %}
+    {% if subAlbums %}
+        {% include '_subalbums.twig' %}
+    {% else %}
+        <div class="alert alert-warning">
+            This gallery currently has no albums.
+            (If this is your gallery, note that only Google Drive folders shared as "public on the web" will be shown here.)
+        </div>
+    {% endif %}
 
 {% endblock %}

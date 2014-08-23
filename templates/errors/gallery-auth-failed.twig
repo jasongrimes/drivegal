@@ -1,0 +1,15 @@
+{% extends "layout.twig" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Error: </strong>
+        Authentication to Google Drive failed.
+    </div>
+
+    <p>
+        If this is your gallery, please
+        <a href="{{ path('setup') }}">grant permission to connect to your Google Drive account</a> again.
+    </p>
+{% endblock %}

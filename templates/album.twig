@@ -12,6 +12,12 @@
 
     {% include '_subalbums.twig' %}
 
+    {% if files is empty %}
+        <div class="alert alert-warning">
+            This album has no photos or videos.
+        </div>
+    {% endif %}
+
     <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
     <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
         <div class="slides"></div>

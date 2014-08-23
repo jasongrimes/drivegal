@@ -144,10 +144,11 @@ class AlbumIndex
      */
     protected function findChildBySlug(Album $parent, $slug)
     {
-        if (is_array($this->parent_children[$parent->getId()])) {
-            foreach ($this->parent_children[$parent->getId()] as $album) {
-                if ($album->getSlug() == $slug) {
-                    return $album;
+        if (array_key_exists($parent->getId(), $this->parent_children)) {
+            foreach ($this->parent_children[$parent->getId()] as $childAlbum) {
+                if ($childAlbum->getSlug() == $slug) {
+
+                    return $childAlbum;
                 }
             }
         }
