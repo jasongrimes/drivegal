@@ -9,7 +9,7 @@ Make a personal service:
 * [x] Configure apache to use the (www.)drivegal.com domain 
 * [x] Get Google drive API fetch working
     - [x] Working prototype
-    - [x] Refactor into something maintainable. (Stop including email in auth url, ...)
+    - [x] Refactor into something maintainable.
 * [x] Make a web page for browsing folders and image lists 
 * [x] Make a lightbox work with the image list
 * [x] Tweak the UI to look how I want it
@@ -43,14 +43,35 @@ Make a personal service:
     - [x] Album 404 should redirect to main gallery page
 * [x] Add code comments
 * [ ] Add login support (with Google oauth)
+    - [x] Get Google login and Silex security provider working
+    - [x] Use a proper user provider that stores users in the database
+        - [x] Install the SimpleUser library.
+        - [x] Add support for customizable data properties in the SimpleUser model. (Store the Google User ID there.)
+    - [x] Create user and auto sign in after setting up a gallery
+    - [x] Show a more friendly error message when attempting to create a new user with a pre-existing email address.
+    - [x] Update email and name from Google when signing in (if they have changed)
+    - [ ] Separate user account data (email, name) from gallery info
+    - [ ] Redirect to gallery settings page after creating a gallery
+* [ ] Move gallery info to db
 * [ ] Allow to manage an existing gallery.
-* [ ] Add DB support
-* [ ] Add an about page
+* [ ] Rework the landing page
+    - [ ] Show a classic parallax effect with content gaps between images. See https://github.com/Prinzhorn/skrollr/tree/master/examples#examples
+    - [ ] Use smaller image sizes
+    - [ ] Rewrite the content sections.
+    - [ ] Put a proper header with a big logo and a sign in / user info box.
+    - [ ] Make it all work well on mobile
+* [ ] Set up a demo gallery
+* [ ] Use it in the real world for awhile
 * [ ] Tweak behavior to fit our photo workflow
 * [ ] Be smarter about the title. Consider that a good workflow is to name the file for the title. Hide the file extension if it's at the end of the title. If the title is `IMG_*.{extension}`, hide it altogether. Use the date for the caption if there's no title or description.
-* [ ] Use it
 * [ ] Set up a reserved EC2 instance to keep costs down.
 * [ ] Figure out how to close/slide after viewing a video on mobile. (Need to leave some free space around a border for the touch gestures?)
+
+Package up code for sharing
+
+* [ ] New SimpleUser release
+* [ ] Make a silex-oauth-simpleuser-bridge composer package
+* [ ] Clean up iframevid plugin and send pull request to blueimp-gallery
 
 Make a public service:
 

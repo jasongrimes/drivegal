@@ -18,7 +18,10 @@
         "symfony/twig-bridge": "~2.3",
         "symfony/validator": "~2.3",
         "google/apiclient": "1.0.*@beta",
-        "cocur/slugify": "dev-master"
+        "cocur/slugify": "dev-master",
+        "gigablah/silex-oauth": "~0.1",
+        "doctrine/dbal": "~2.4",
+        "jasongrimes/silex-simpleuser": "dev-master"
     },
     "autoload": {
         "psr-0": { "Drivegal": "src/" }

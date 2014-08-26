@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <div>
+        {% if app.user %}
+            <p>Hello {{ app.user.username }}! Your email is {{ app.user.email }}</p>
+            <a href="{{ logout_path }}">Sign out</a>
+        {% else %}
+            <div style="text-align: center">
+                <a href="{{ login_paths.google }}">
+                    <img src="/img/google-sign-in-red-long.png" width="300" alt="Sign in with Google"/>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

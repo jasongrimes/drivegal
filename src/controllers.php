@@ -44,6 +44,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
         return;
     }
 
+    $message = '';
     switch (get_class($e)) {
         case 'Drivegal\Exception\ServiceException':
             $code = 503;
@@ -121,11 +122,24 @@ $app->get('/oauth', function(Application $app, Request $request) {
 });
 
 //
-// Controller: Edit info about a gallery.
+// Controller: Manage settings for a gallery.
 //
-$app->get('/edit-gallery/{google_user_id}', function(Application $app, GalleryInfo $galleryInfo) {
+$app->get('/settings', function(Application $app) {
+    if (!$app['user']) {
+        $app['session']->getFlashBag()->add('error', 'You must sign in to edit your settings.');
+        return $app->redirect($app['url_generator']->generate('login'));
+    }
+
+    $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->googleUserId);
+    if (!$galleryInfo) {
+        $app['session']->getFlashBag()->add('error', 'You don\'t have a gallery set up yet. You can set one up below.');
+        return $app->redirect($app['url_generator']->generate('setup'));
+    }
+
     return $app['twig']->render('edit.twig', array('galleryInfo' => $galleryInfo));
-})->convert('galleryInfo', $gallery_provider);
+})
+->bind('settings')
+;
 
 //
 // Controller: View an album in a gallery
@@ -165,3 +179,56 @@ $app->get('/{gallery_slug}/', function(Application $app, GalleryInfo $galleryInf
 ->convert('galleryInfo', $gallery_provider)
 ->bind('gallery')
 ;
+
+//
+// Middleware: Determine the current user.
+//
+$app->before(function (Symfony\Component\HttpFoundation\Request $request) use ($app) {
+    $token = $app['security']->getToken();
+    // echo '<pre>' . print_r($token, true);
+    $app['user'] = null;
+
+    if ($token && !$app['security.trust_resolver']->isAnonymous($token)) {
+        $app['user'] = $token->getUser();
+        $app['user']->googleUserId = $token->getUid();
+    }
+});
+
+//
+// Controller: Login
+//
+$app->get('/login', function () use ($app) {
+    $services = array_keys($app['oauth.services']);
+
+    return $app['twig']->render('login.twig', array(
+        'login_paths' => array_map(function ($service) use ($app) {
+            return $app['url_generator']->generate('_auth_service', array(
+                'service' => $service,
+                '_csrf_token' => $app['form.csrf_provider']->generateCsrfToken('oauth')
+            ));
+        }, array_combine($services, $services)),
+        'logout_path' => $app['url_generator']->generate('logout', array(
+                '_csrf_token' => $app['form.csrf_provider']->generateCsrfToken('logout')
+            ))
+    ));
+})
+->bind('login');
+
+//
+// Controller: Logout
+//
+$app->match('/logout', function () {})->bind('logout');
+
+//
+// Controller: View my gallery
+//
+$app->get('/my-gallery', function(Application $app) {
+    if ($app['user'] && $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->googleUserId)) {
+        return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
+    }
+
+    $app['session']->getFlashBag()->add('error', 'You must sign in before your gallery can be determined.');
+
+    return $app->redirect($app['url_generator']->generate('login'));
+})
+->bind('my-gallery');
