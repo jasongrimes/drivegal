@@ -14,12 +14,6 @@ class GalleryInfo
     protected $galleryName;
 
     /** @var string */
-    protected $googleUserName;
-
-    /** @var string */
-    protected $email;
-
-    /** @var string */
     protected $credentials;
 
     /** @var boolean */
@@ -58,22 +52,6 @@ class GalleryInfo
 
 
     /**
-     * @param string $googleUserName
-     */
-    public function setGoogleUserName($googleUserName)
-    {
-        $this->googleUserName = $googleUserName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGoogleUserName()
-    {
-        return $this->googleUserName;
-    }
-
-    /**
      * @param string $credentials
      */
     public function setCredentials($credentials)
@@ -87,22 +65,6 @@ class GalleryInfo
     public function getCredentials()
     {
         return $this->credentials;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -168,6 +130,4 @@ class GalleryInfo
     {
         return $this->time_created;
     }
-
-
 }

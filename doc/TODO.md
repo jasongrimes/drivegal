@@ -42,7 +42,7 @@ Make a personal service:
     - [x] When an album has no photos
     - [x] Album 404 should redirect to main gallery page
 * [x] Add code comments
-* [ ] Add login support (with Google oauth)
+* [x] Add login support (with Google oauth)
     - [x] Get Google login and Silex security provider working
     - [x] Use a proper user provider that stores users in the database
         - [x] Install the SimpleUser library.
@@ -50,10 +50,11 @@ Make a personal service:
     - [x] Create user and auto sign in after setting up a gallery
     - [x] Show a more friendly error message when attempting to create a new user with a pre-existing email address.
     - [x] Update email and name from Google when signing in (if they have changed)
-    - [ ] Separate user account data (email, name) from gallery info
-    - [ ] Redirect to gallery settings page after creating a gallery
-* [ ] Move gallery info to db
+    - [x] Separate user account data (email, name) from gallery info
 * [ ] Allow to manage an existing gallery.
+    - [ ] Move gallery info to db
+    - [ ] Make a form and controller for editing (my) gallery settings
+    - [ ] Redirect to gallery settings page after creating a gallery
 * [ ] Rework the landing page
     - [ ] Show a classic parallax effect with content gaps between images. See https://github.com/Prinzhorn/skrollr/tree/master/examples#examples
     - [ ] Use smaller image sizes

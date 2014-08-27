@@ -165,7 +165,7 @@ class Authenticator
     {
 
         $galleryInfo = $this->galleryInfoMapper->createGalleryInfo($user_info->getId(), $user_info->getName());
-        $galleryInfo->setEmail($user_info->getEmail());
+        // $galleryInfo->setEmail($user_info->getEmail());
 
         return $galleryInfo;
     }

@@ -62,12 +62,12 @@ class GalleryInfoMapper
      * Create a new GalleryInfo object.
      *
      * @param int $googleUserId
-     * @param string|null $googleUserName
+     * @param string|null $galleryName
      * @return GalleryInfo
      */
-    public function createGalleryInfo($googleUserId, $googleUserName = null)
+    public function createGalleryInfo($googleUserId, $galleryName = null)
     {
-        $galleryName = $googleUserName ?: $googleUserId;
+        if (empty($galleryName)) $galleryName = $googleUserId;
 
         $slug = $this->createGallerySlug($galleryName);
 
@@ -79,7 +79,7 @@ class GalleryInfoMapper
         }
 
         $galleryInfo = new GalleryInfo($googleUserId, $slug, $galleryName);
-        $galleryInfo->setGoogleUserName($googleUserName);
+        // $galleryInfo->setGoogleUserName($googleUserName);
 
         return $galleryInfo;
     }
