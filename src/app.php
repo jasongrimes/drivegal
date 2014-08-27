@@ -55,6 +55,9 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         'default' => array(
             'pattern' => '^/',
             'anonymous' => true,
+            'remember_me' => array(
+                'always_remember_me' => true,
+            ),
             'oauth' => array(
                 //'login_path' => '/auth/{service}',
                 //'callback_path' => '/auth/{service}/callback',
@@ -77,6 +80,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         array('^/auth', 'ROLE_USER')
     )
 ));
+$app->register(new \Silex\Provider\RememberMeServiceProvider());
 
 $app->register(new SimpleUser\UserServiceProvider());
 
