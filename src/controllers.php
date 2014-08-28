@@ -130,7 +130,7 @@ $app->get('/settings', function(Application $app) {
         return $app->redirect($app['url_generator']->generate('login'));
     }
 
-    $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->googleUserId);
+    $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->getCustomField('googleUserId'));
     if (!$galleryInfo) {
         $app['session']->getFlashBag()->add('error', 'You don\'t have a gallery set up yet. You can set one up below.');
         return $app->redirect($app['url_generator']->generate('setup'));
@@ -190,7 +190,6 @@ $app->before(function (Symfony\Component\HttpFoundation\Request $request) use ($
 
     if ($token && !$app['security.trust_resolver']->isAnonymous($token)) {
         $app['user'] = $token->getUser();
-        $app['user']->googleUserId = $token->getUid();
     }
 });
 
@@ -223,12 +222,19 @@ $app->match('/logout', function () {})->bind('logout');
 // Controller: View my gallery
 //
 $app->get('/my-gallery', function(Application $app) {
-    if ($app['user'] && $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->googleUserId)) {
-        return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
+    if (!$app['user']) {
+        $app['session']->getFlashBag()->add('error', 'Please log in to find your gallery.');
+
+        return $app->redirect($app['url_generator']->generate('login'));
     }
 
-    $app['session']->getFlashBag()->add('error', 'You must sign in before your gallery can be determined.');
+    $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->getCustomField('googleUserId'));
+    if (!$galleryInfo) {
+        $app['session']->getFlashBag()->add('error', 'You haven\'t set up a gallery for this Google account yet.');
 
-    return $app->redirect($app['url_generator']->generate('login'));
+        return $app->redirect($app['url_generator']->generate('setup'));
+    }
+
+    return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
 })
 ->bind('my-gallery');

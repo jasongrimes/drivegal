@@ -41,7 +41,7 @@ $app['authenticator'] = $app->share(function($app) {
 $app['oauth_user_provider'] = $app->share(function($app) { return new OAuthSimpleUserProvider($app['user.manager']); });
 
 $app['gallery.info.mapper'] = $app->share(function($app) {
-    return new GalleryInfoMapper($app['slugify']);
+    return new GalleryInfoMapper($app['db'], $app['slugify']);
 });
 $app['gallery'] = $app->share(function($app) {
    return new GalleryService($app['authenticator'], $app['gallery.info.mapper'], $app['slugify']);

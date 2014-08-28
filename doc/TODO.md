@@ -1,8 +1,6 @@
 Photo Gallery for Google Drive TODO list
 ========================================
 
-Make a personal service:
-
 * [x] Set up a LAMP environment (actually just need the LAP part for now)
 * [x] Put a Silex skeleton together
 * [x] Register drivegal.com
@@ -52,7 +50,7 @@ Make a personal service:
     - [x] Update email and name from Google when signing in (if they have changed)
     - [x] Separate user account data (email, name) from gallery info
 * [ ] Allow to manage an existing gallery.
-    - [ ] Move gallery info to db
+    - [x] Move gallery info to db
     - [ ] Make a form and controller for editing (my) gallery settings
     - [ ] Redirect to gallery settings page after creating a gallery
 * [ ] Rework the landing page
@@ -74,7 +72,7 @@ Package up code for sharing
 * [ ] Make a silex-oauth-simpleuser-bridge composer package
 * [ ] Clean up iframevid plugin and send pull request to blueimp-gallery
 
-Make a public service:
+Make it a public service:
 
 * Add a copyright notice and privacy policy
 * Release it and promote it

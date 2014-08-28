@@ -17,17 +17,17 @@ class GalleryInfo
     protected $credentials;
 
     /** @var boolean */
-    protected $is_active = true;
+    protected $isActive = true;
 
     /** @var string  */
-    protected $time_created;
+    protected $timeCreated;
 
     public function __construct($googleUserId, $slug, $galleryName)
     {
         $this->google_user_id = $googleUserId;
         $this->galleryName = $galleryName;
         $this->slug = $slug;
-        $this->time_created = date('Y-m-d H:i:s');
+        $this->timeCreated = date('Y-m-d H:i:s');
     }
 
     //
@@ -84,11 +84,11 @@ class GalleryInfo
     }
 
     /**
-     * @param boolean $is_active
+     * @param boolean $isActive
      */
-    public function setIsActive($is_active)
+    public function setIsActive($isActive)
     {
-        $this->is_active = $is_active;
+        $this->isActive = $isActive;
     }
 
     /**
@@ -96,7 +96,7 @@ class GalleryInfo
      */
     public function getIsActive()
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
     /**
@@ -116,11 +116,11 @@ class GalleryInfo
     }
 
     /**
-     * @param string $time_created
+     * @param string $timeCreated
      */
-    public function setTimeCreated($time_created)
+    public function setTimeCreated($timeCreated)
     {
-        $this->time_created = $time_created;
+        $this->timeCreated = $timeCreated;
     }
 
     /**
@@ -128,6 +128,6 @@ class GalleryInfo
      */
     public function getTimeCreated()
     {
-        return $this->time_created;
+        return $this->timeCreated;
     }
 }

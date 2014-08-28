@@ -3,17 +3,23 @@
 namespace Drivegal;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\DBAL\Connection;
 
 class GalleryInfoMapper
 {
+    /** @var \Doctrine\DBAL\Driver\Connection */
+    protected $conn;
+
     /** @var Slugify */
     protected $slugify;
 
     /**
+     * @param Connection $conn
      * @param Slugify $slugify
      */
-    public function __construct(Slugify $slugify)
+    public function __construct(Connection $conn, Slugify $slugify)
     {
+        $this->conn = $conn;
         $this->slugify = $slugify;
     }
 
@@ -23,6 +29,7 @@ class GalleryInfoMapper
      */
     public function findBySlug($slug)
     {
+        /*
         // Super quick hack just for testing until I get a db set up.
         $id = null;
         $file = shell_exec('grep -l \'"' . $slug . '"\' ' . __DIR__ . '/../../var/gallery-*');
@@ -31,6 +38,9 @@ class GalleryInfoMapper
         }
 
         return $id ? $this->findByGoogleUserId($id) : null;
+        */
+
+        return $this->findOneBy(array('slug' => $slug));
     }
 
     /**
@@ -39,27 +49,121 @@ class GalleryInfoMapper
      */
     public function findByGoogleUserId($id)
     {
+        /*
         $contents = file_get_contents(__DIR__ . '/../../var/gallery-' . $id);
         if (!$contents) {
             return null;
         }
 
         return unserialize($contents);
+        */
+
+        return $this->findOneBy(array('googleUserId' => $id));
     }
 
     /**
-     * @param GalleryInfo $galleryInfo
+     * @param array $criteria
+     * @param array $options
+     * @return GalleryInfo|null
+     */
+    public function findOneBy(array $criteria, array $options = array())
+    {
+        $galleryInfos = $this->findBy($criteria, $options);
+
+        return reset($galleryInfos) ?: null;
+    }
+
+    /**
+     * @param array $criteria
+     * @param array $options
+     * @return GalleryInfo[]
+     */
+    public function findBy(array $criteria, array $options = array())
+    {
+        $params = array();
+        $sql = 'SELECT * FROM galleryInfo ';
+
+        $first_crit = true;
+        foreach ($criteria as $key => $val) {
+            $sql .= ($first_crit ? 'WHERE' : 'AND') . ' ' . $key . ' = :' . $key . ' ';
+            $params[$key] = $val;
+            $first_crit = false;
+        }
+
+        if (array_key_exists('order_by', $options)) {
+            list ($order_by, $order_dir) = is_array($options['order_by']) ? $options['order_by'] : array($options['order_by']);
+            $sql .= 'ORDER BY ' . $this->conn->quoteIdentifier($order_by) . ' ' . ($order_dir == 'DESC' ? 'DESC' : 'ASC') . ' ';
+        }
+        if (array_key_exists('limit', $options)) {
+            list ($offset, $limit) = is_array($options['limit']) ? $options['limit'] : array(0, $options['limit']);
+            $sql .=   ' LIMIT ' . (int) $limit . ' ' .' OFFSET ' . (int) $offset ;
+        }
+
+        $rows = $this->conn->fetchAll($sql, $params);
+
+        $galleryInfos = array();
+        foreach ($rows as $row) {
+            $galleryInfo = $this->hydrateGalleryInfo($row);
+            $galleryInfos[] = $galleryInfo;
+        }
+
+        return $galleryInfos;
+    }
+
+    /**
+     * @param array $data
      * @return GalleryInfo
      */
-    public function save(GalleryInfo $galleryInfo)
+    protected function hydrateGalleryInfo(array $data)
     {
-        file_put_contents(__DIR__ . '/../../var/gallery-' . $galleryInfo->getGoogleUserId(), serialize($galleryInfo));
+        $galleryInfo = new GalleryInfo($data['googleUserId'], $data['slug'], $data['galleryName']);
+
+        $galleryInfo->setCredentials($data['credentials']);
+        $galleryInfo->setIsActive($data['isActive']);
+        $galleryInfo->setTimeCreated($data['timeCreated']);
 
         return $galleryInfo;
     }
 
     /**
-     * Create a new GalleryInfo object.
+     * @param GalleryInfo $galleryInfo
+     */
+    public function save(GalleryInfo $galleryInfo)
+    {
+        /*
+        file_put_contents(__DIR__ . '/../../var/gallery-' . $galleryInfo->getGoogleUserId(), serialize($galleryInfo));
+
+        return $galleryInfo;
+        */
+
+        $exists = $this->findByGoogleUserId($galleryInfo->getGalleryName()) ? true : false;
+
+        $sql = ($exists ? 'UPDATE' : 'INSERT INTO') . ' galleryInfo ';
+        $sql .= 'SET slug = :slug
+            , galleryName = :galleryName
+            , credentials = :credentials
+            , isActive = :isActive
+            , timeCreated = :timeCreated ';
+        if ($exists) {
+            $sql .= 'WHERE googleUserId = :googleUserId ';
+        } else {
+            $sql .= ', googleUserId = :googleUserId ';
+        }
+
+        $params = array(
+            'googleUserId' => $galleryInfo->getGoogleUserId(),
+            'slug' => $galleryInfo->getSlug(),
+            'galleryName' => $galleryInfo->getGalleryName(),
+            'credentials' => $galleryInfo->getCredentials(),
+            'isActive' => $galleryInfo->getIsActive(),
+            'timeCreated' => $galleryInfo->getTimeCreated(),
+        );
+
+        $this->conn->executeUpdate($sql, $params);
+    }
+
+    /**
+     * Create a new GalleryInfo object, ensuring there are no collisions with existing gallery slugs.
      *
      * @param int $googleUserId
      * @param string|null $galleryName
@@ -79,7 +183,6 @@ class GalleryInfoMapper
         }
 
         $galleryInfo = new GalleryInfo($googleUserId, $slug, $galleryName);
-        // $galleryInfo->setGoogleUserName($googleUserName);
 
         return $galleryInfo;
     }
