@@ -29,17 +29,6 @@ class GalleryInfoMapper
      */
     public function findBySlug($slug)
     {
-        /*
-        // Super quick hack just for testing until I get a db set up.
-        $id = null;
-        $file = shell_exec('grep -l \'"' . $slug . '"\' ' . __DIR__ . '/../../var/gallery-*');
-        if ($file) {
-            $id = trim(substr($file, strrpos($file, '-') + 1));
-        }
-
-        return $id ? $this->findByGoogleUserId($id) : null;
-        */
-
         return $this->findOneBy(array('slug' => $slug));
     }
 
@@ -49,15 +38,6 @@ class GalleryInfoMapper
      */
     public function findByGoogleUserId($id)
     {
-        /*
-        $contents = file_get_contents(__DIR__ . '/../../var/gallery-' . $id);
-        if (!$contents) {
-            return null;
-        }
-
-        return unserialize($contents);
-        */
-
         return $this->findOneBy(array('googleUserId' => $id));
     }
 
@@ -130,12 +110,6 @@ class GalleryInfoMapper
      */
     public function save(GalleryInfo $galleryInfo)
     {
-        /*
-        file_put_contents(__DIR__ . '/../../var/gallery-' . $galleryInfo->getGoogleUserId(), serialize($galleryInfo));
-
-        return $galleryInfo;
-        */
-
         $exists = $this->findByGoogleUserId($galleryInfo->getGalleryName()) ? true : false;
 
         $sql = ($exists ? 'UPDATE' : 'INSERT INTO') . ' galleryInfo ';
