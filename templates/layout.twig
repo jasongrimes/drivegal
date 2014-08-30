@@ -115,6 +115,14 @@
 
         <script src="/js/lib/jquery/jquery-1.11.1.min.js"></script>
         <script src="/css/lib/bootstrap/js/bootstrap.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                // When opening the collapsed navbar (on mobile), automatically expand the dropdowns inside it.
+                $('.navbar').on('shown.bs.collapse', function(e) {
+                    $(e.target).find('.dropdown-toggle').dropdown('toggle');
+                });
+            });
+        </script>
 
         {% block footer '' %}
     </body>

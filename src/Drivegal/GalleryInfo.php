@@ -130,4 +130,30 @@ class GalleryInfo
     {
         return $this->timeCreated;
     }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    protected function getCredentialValue($key)
+    {
+        $token = json_decode($this->credentials, true);
+
+        if (is_array($token) && array_key_exists($key, $token)) {
+            return $token[$key];
+        }
+
+        return null;
+    }
+
+    public function getAccessToken()
+    {
+        return $this->getCredentialValue('access_token');
+    }
+
+    public function getRefreshToken()
+    {
+        return $this->getCredentialValue('refresh_token');
+    }
+
 }

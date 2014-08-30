@@ -110,7 +110,7 @@ class GalleryInfoMapper
      */
     public function save(GalleryInfo $galleryInfo)
     {
-        $exists = $this->findByGoogleUserId($galleryInfo->getGalleryName()) ? true : false;
+        $exists = $this->findByGoogleUserId($galleryInfo->getGoogleUserId()) ? true : false;
 
         $sql = ($exists ? 'UPDATE' : 'INSERT INTO') . ' galleryInfo ';
         $sql .= 'SET slug = :slug

@@ -20,7 +20,7 @@ global $app;
 //
 // Helper function to convert a route parameter into a gallery.
 //
-$gallery_provider = function($galleryInfo, Request $request) use ($app) {
+$galleryProvider = function($galleryInfo, Request $request) use ($app) {
     if ($slug = $request->attributes->get('gallery_slug')) {
         $galleryInfo = $app['gallery.info.mapper']->findBySlug($slug);
     } elseif ($id = $request->attributes->get('google_user_id')) {
@@ -96,7 +96,6 @@ $app->get('/setup', function() use ($app) {
 ->bind('setup')
 ;
 
-
 // Controller: Handle OAuth redirects from Google.
 $app->get('/oauth', function(Application $app, Request $request) {
     if ($error_code = $request->query->get('error')) {
@@ -113,30 +112,90 @@ $app->get('/oauth', function(Application $app, Request $request) {
     $auth_result = $app['authenticator']->authorizeGallery($request->query->get('code'));
     if ($auth_result['success']) {
         $app['session']->getFlashBag()->add('success', 'Successfully connected to your Google Drive account.');
-        return $app->redirect('/' . $auth_result['galleryInfo']->getSlug());
-        // return $app->redirect('/edit-gallery/' . $auth_result['galleryInfo']->getGoogleUserId());
+        // return $app->redirect('/' . $auth_result['galleryInfo']->getSlug());
+
+        return $app->redirect($app['url_generator']->generate('settings'));
     } else {
         $app['session']->getFlashBag()->add('error', $auth_result['error']);
+
         return $app->redirect($app['url_generator']->generate('setup'));
     }
 });
 
 //
-// Controller: Manage settings for a gallery.
+// Controller: Deactivate gallery
 //
-$app->get('/settings', function(Application $app) {
+$app->get('/deactivate', function(Application $app) {
     if (!$app['user']) {
-        $app['session']->getFlashBag()->add('error', 'You must sign in to edit your settings.');
+        $app['session']->getFlashBag()->add('error', 'Please log in to find your gallery.');
+
         return $app->redirect($app['url_generator']->generate('login'));
     }
 
     $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->getCustomField('googleUserId'));
     if (!$galleryInfo) {
-        $app['session']->getFlashBag()->add('error', 'You don\'t have a gallery set up yet. You can set one up below.');
+        $app['session']->getFlashBag()->add('error', 'You haven\'t set up a gallery for this Google account yet.');
+
         return $app->redirect($app['url_generator']->generate('setup'));
     }
 
-    return $app['twig']->render('edit.twig', array('galleryInfo' => $galleryInfo));
+    if ($app['gallery']->deactivateGallery($galleryInfo)) {
+        $app['session']->getFlashBag()->add('success', 'Disconnected from your Google Drive account and deactivated your gallery.');
+
+        return $app->redirect($app['url_generator']->generate('setup'));
+    } else {
+        $app['session']->getFlashBag()->add('error', 'Error disconnecting from your Google Drive account.');
+
+        return $app->redirect($app['url_generator']->generate('settings'));
+    }
+
+
+})
+->bind('deactivate');
+
+//
+// Controller: Manage settings for a gallery.
+//
+$app->match('/settings', function(Application $app, Request $request) {
+    if (!$app['user']) {
+        $app['session']->getFlashBag()->add('error', 'You must sign in to edit your settings.');
+        return $app->redirect($app['url_generator']->generate('login'));
+    }
+
+    /** @var GalleryInfo $galleryInfo */
+    $galleryInfo = $app['gallery.info.mapper']->findByGoogleUserId($app['user']->getCustomField('googleUserId'));
+    if (!$galleryInfo) {
+        $app['session']->getFlashBag()->add('error', 'You don\'t have a gallery set up yet. You can set one up below.');
+        return $app->redirect($app['url_generator']->generate('setup'));
+    }
+    if (!$galleryInfo->getIsActive()) {
+        $app['session']->getFlashBag()->add('error', 'Your gallery was deactivated. You can reactivate it by connecting to your Google Drive below.');
+        return $app->redirect($app['url_generator']->generate('setup'));
+    }
+
+    // Process form submissions.
+    if ($request->isMethod('POST')) {
+        $galleryInfo->setSlug($request->request->get('slug'));
+        $galleryInfo->setGalleryName($request->request->get('galleryName'));
+
+        $errors = $app['gallery']->validateGalleryInfo($galleryInfo);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $app['session']->getFlashBag()->add('error', $error);
+            }
+        } else {
+            // Save the gallery info
+            $app['gallery.info.mapper']->save($galleryInfo);
+            $app['session']->getFlashBag()->add('success', 'Saved gallery info.');
+
+            return $app->redirect($app['url_generator']->generate('my-gallery'));
+        }
+    }
+
+    return $app['twig']->render('edit.twig', array(
+        'galleryInfo' => $galleryInfo,
+        'galleryUrl' => 'http://drivegal.com/' . $galleryInfo->getSlug(),
+    ));
 })
 ->bind('settings')
 ;
@@ -162,7 +221,7 @@ $app->get('/{gallery_slug}/{album_path}/', function(Application $app, GalleryInf
 })
 ->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash (we have to specify that manually since we override the default regex).
 ->assert('album_path', '.+') // album path *can* contain slashes.
-->convert('galleryInfo', $gallery_provider)
+->convert('galleryInfo', $galleryProvider)
 ;
 
 //
@@ -176,7 +235,7 @@ $app->get('/{gallery_slug}/', function(Application $app, GalleryInfo $galleryInf
     ));
 })
 ->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
-->convert('galleryInfo', $gallery_provider)
+->convert('galleryInfo', $galleryProvider)
 ->bind('gallery')
 ;
 
@@ -238,3 +297,4 @@ $app->get('/my-gallery', function(Application $app) {
     return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
 })
 ->bind('my-gallery');
+

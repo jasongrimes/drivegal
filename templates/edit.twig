@@ -14,9 +14,60 @@
         </div>
     {% endif %}
 
-    <h1>Edit information about your gallery</h1>
+    <h1>Your gallery settings</h1>
 
-    <div>
-        form will go here...
+    <p>
+        View your gallery here:
+        <a href="{{ galleryUrl }}">{{ galleryUrl }}</a>
+    </p>
+
+    <form role="form" method="POST">
+        <div class="form-group">
+            <label for="inputGalleryName">Gallery name</label>
+            <input type="text"
+                   maxlength="255"
+                   class="form-control"
+                   id="inputGalleryName"
+                   placeholder=""
+                   name="galleryName"
+                   value="{{ galleryInfo.galleryName }}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="inputSlug">Web address</label>
+            <div class="input-group">
+                <div class="input-group-addon">http://drivegal.com/</div>
+                <input type="text"
+                       maxlength="255"
+                       class="form-control"
+                       id="inputSlug"
+                       placeholder=""
+                       name="slug"
+                       value="{{ galleryInfo.slug }}"
+                       pattern="[A-Za-z0-9_\-]+"
+                       title="Only letters, numbers, underscores (_), or hyphens (-) are allowed."
+                       required>
+            </div>
+            <p class="help-block">
+                Specify the custom portion of your gallery's URL (also known as its "slug").
+            </p>
+        </div>
+        <button type="submit" class="btn btn-primary">Save settings</button>
+        <a href="{{ path('my-gallery') }}" class="btn btn-link">Cancel</a>
+    </form>
+
+    <div class="panel panel-danger" style="margin-top: 100px;">
+        <div class="panel-heading">
+            <h2 class="panel-title">Deactivate your gallery</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                To disconnect from your Google Drive account and deactivate your gallery, click the button below.
+            </p>
+            <p>
+                <a href="{{ path('deactivate') }}" class="btn btn-default">Deactivate gallery</a>
+            </p>
+        </div>
     </div>
+
 {% endblock %}

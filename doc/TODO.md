@@ -49,10 +49,11 @@ Photo Gallery for Google Drive TODO list
     - [x] Show a more friendly error message when attempting to create a new user with a pre-existing email address.
     - [x] Update email and name from Google when signing in (if they have changed)
     - [x] Separate user account data (email, name) from gallery info
-* [ ] Allow to manage an existing gallery.
+* [x] Allow to manage an existing gallery.
     - [x] Move gallery info to db
-    - [ ] Make a form and controller for editing (my) gallery settings
-    - [ ] Redirect to gallery settings page after creating a gallery
+    - [x] Make a form and controller for editing (my) gallery settings
+    - [x] Redirect to gallery settings page after creating a gallery
+    - [x] Give an option to disconnect from Google Drive
 * [ ] Rework the landing page
     - [ ] Show a classic parallax effect with content gaps between images. See https://github.com/Prinzhorn/skrollr/tree/master/examples#examples
     - [ ] Use smaller image sizes

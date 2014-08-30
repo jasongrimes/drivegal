@@ -110,21 +110,13 @@ class Authenticator
         } catch (CreateUserException $e) {
             return array('success' => false, 'error' => 'Error creating a user account: ' . $e->getMessage());
         }
-        /*
-        // Create a user account if there isn't one already, and log them in.
-        $user = $this->userManager->findOneBy(array('customFields' => array('googleUserId' => $user_info->getId())));
-        if (!$user) {
-            $user = $this->userManager->createUser($user_info->getEmail(), '', $user_info->getName());
-            $user->setCustomField('googleUserId', $user_info->getId());
-            $this->userManager->insert($user);
-        }
-        */
         $this->setViewerLoggedInAs($user);
 
         // Save the refresh token if we got one.
         $credentials_array = json_decode($credentials, true);
         if (isset($credentials_array['refresh_token'])) {
             $galleryInfo->setCredentials($credentials);
+            $galleryInfo->setIsActive(true);
             $this->galleryInfoMapper->save($galleryInfo);
 
             return array('success' => true, 'galleryInfo' => $galleryInfo);
@@ -165,7 +157,6 @@ class Authenticator
     {
 
         $galleryInfo = $this->galleryInfoMapper->createGalleryInfo($user_info->getId(), $user_info->getName());
-        // $galleryInfo->setEmail($user_info->getEmail());
 
         return $galleryInfo;
     }
@@ -188,7 +179,5 @@ class Authenticator
         $authenticatedToken->setUser($user);
 
         $this->securityContext->setToken($authenticatedToken);
-
     }
-
 }

@@ -327,4 +327,52 @@ class GalleryService
         return new Google_Service_Drive($client);
 
     }
+
+    /**
+     * Validate a GalleryInfo object.
+     *
+     * @param GalleryInfo $galleryInfo
+     * @return array An array of error messages. If there are no errors, an empty array is returned.
+     */
+    public function validateGalleryInfo(GalleryInfo $galleryInfo)
+    {
+        $errors = array();
+
+        if (!$galleryInfo->getGalleryName()) {
+            $errors['galleryName'] = 'Please specify a gallery name.';
+        }
+
+        if (!$galleryInfo->getSlug()) {
+            $errors['slug'] = 'Please specify a web address (slug).';
+        } else {
+            if ($match = $this->galleryInfoMapper->findBySlug($galleryInfo->getSlug())) {
+                if ($match->getGoogleUserId() != $galleryInfo->getGoogleUserId()) {
+                    $errors['slug'] = 'That web address (slug) is already in use by another gallery. Please specify a different one.';
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Disconnect a gallery from a Google Drive account (by telling Google to revoke its OAuth2 access token).
+     *
+     * @param GalleryInfo $galleryInfo
+     * @return bool True on success, false otherwise.
+     */
+    public function deactivateGallery(GalleryInfo $galleryInfo)
+    {
+        $client = $this->authenticator->createClient();
+        $result = $client->revokeToken($galleryInfo->getRefreshToken());
+
+        if (!$result) {
+            return false;
+        }
+
+        $galleryInfo->setIsActive(false);
+        $this->galleryInfoMapper->save($galleryInfo);
+
+        return true;
+    }
 }
