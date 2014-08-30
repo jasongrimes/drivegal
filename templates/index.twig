@@ -1,176 +1,444 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<html class="no-skrollr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="">
 
-        <title>Photo Gallery for Google Drive</title>
-        <meta name="description" content="">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
 
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+    <link rel="stylesheet" href="/css/lib/bootstrap/css/bootstrap.min.css">
 
-        <link rel="stylesheet" href="/css/lib/normalize.css">
-        <link rel="stylesheet" href="/css/homepage.css">
-        <script src="/js/lib/modernizr-2.7.1.min.js"></script>
-        <style type="text/css">
-            body {
-                font-family: 'Open Sans', sans-serif;
-            }
-        </style>
-    </head>
-    <body class="loading">
-        <!--[if lt IE 7]>
-        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
+    <title>Photo Gallery for Google Drive</title>
 
-        <div id="preload">
-            <img src="/img/bcg_slide-1.jpg">
-            <img src="/img/bcg_slide-2.jpg">
-            <img src="/img/bcg_slide-3.jpg">
-            <img src="/img/bcg_slide-4.jpg">
-            <img src="/img/bcg_slide-5.jpg">
+    <style type="text/css">
+        * {
+            padding:0;
+            margin:0;
+        }
+
+        html, body {
+            height:100%;
+        }
+
+        .skrollr-desktop body {
+            height:100% !important;
+        }
+
+        body {
+            font-family:sans-serif;
+            font-size: large;
+        }
+
+        p {
+            margin:1em 0;
+        }
+
+        .parallax-image-wrapper {
+            position:fixed;
+            left:0;
+            width:100%;
+            overflow:hidden;
+        }
+
+        .parallax-image-wrapper-50 {
+            height:50%;
+            top:-50%;
+        }
+
+        .parallax-image-wrapper-75 {
+            height:75%;
+            top:-75%;
+        }
+
+        .parallax-image-wrapper-100 {
+            height:100%;
+            top:-100%;
+        }
+
+        .parallax-image {
+            display:none;
+            position:absolute;
+            bottom:0;
+            left:0;
+            width:100%;
+            background-repeat:no-repeat;
+            background-position:center;
+            background-size:cover;
+        }
+
+        .parallax-image-50 {
+            height:200%;
+            top:-50%;
+        }
+
+        .parallax-image-75 {
+            height:150%;
+            top:-50%;
+        }
+
+        .parallax-image-100 {
+            height:100%;
+            top:0;
+        }
+
+        .parallax-image.skrollable-between {
+            display:block;
+        }
+
+        .no-skrollr .parallax-image-wrapper {
+            display:none !important;
+        }
+
+        #skrollr-body {
+            height:100%;
+            overflow:visible;
+            position:relative;
+        }
+
+        .gap {
+            background:transparent center no-repeat;
+            background-size:cover;
+        }
+
+        .skrollr .gap {
+            background:transparent !important;
+        }
+
+        .gap-50 {
+            height:50%;
+        }
+
+        .gap-75 {
+            height:75%;
+        }
+
+        .gap-100 {
+            height:100%;
+        }
+
+        .header, .content {
+            background:#fff;
+            padding:1em;
+
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing:border-box;
+            box-sizing:border-box;
+        }
+
+        .content-full {
+            height:100%;
+        }
+
+        #done {
+            height:100%;
+        }
+
+        /* Gallery styles */
+
+        #skrollr-body .navbar {
+            margin-bottom: 0px;
+            border: none;
+            padding: 10px 0px;
+        }
+
+        .btn-transparent {
+            color: #fff;
+            background: transparent;
+            border-color: #fff;
+        }
+        .btn-transparent:hover,
+        .btn-transparent:focus,
+        .btn-transparent:active,
+        .btn-transparent.active {
+            color: #fff;
+            background-color: #3071a9;
+            border-color: #285e8e;
+        }
+        .btn-transparent:active,
+        .btn-transparent.active {
+            background-image: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+        We position the images fixed and therefore need to place them outside of #skrollr-body.
+        We will then use data-anchor-target to display the correct image matching the current section (.gap element).
+    -->
+
+    <div
+            class="parallax-image-wrapper parallax-image-wrapper-75"
+            data-anchor-target="#gallery + .gap"
+            data-bottom-top="transform:translate3d(0px, 225%, 0px)"
+            data-top-bottom="transform:translate3d(0px, 0%, 0px)">
+
+        <div
+                class="parallax-image parallax-image-75"
+                style="background-image:url(/img/gallery.jpg)"
+                data-anchor-target="#gallery + .gap"
+                data-bottom-top="transform: translate3d(0px, -80%, 0px);"
+                data-top-bottom="transform: translate3d(0px, 80%, 0px);"
+                ></div>
+        <!--the +/-80% translation can be adjusted to control the speed difference of the image-->
+    </div>
+
+    <!--div
+            class="parallax-image-wrapper parallax-image-wrapper-50"
+            data-anchor-target="#photographer + .gap"
+            data-bottom-top="transform:translate3d(0px, 300%, 0px)"
+            data-top-bottom="transform:translate3d(0px, 0%, 0px)">
+
+        <div
+                class="parallax-image parallax-image-50"
+                style="background-image:url(/img/photographer.jpg)"
+                data-anchor-target="#photographer + .gap"
+                data-bottom-top="transform: translate3d(0px, -60%, 0px);"
+                data-top-bottom="transform: translate3d(0px, 60%, 0px);"
+                ></div>
+    </div-->
+
+    <div
+            class="parallax-image-wrapper parallax-image-wrapper-50"
+            data-anchor-target="#photowall + .gap"
+            data-bottom-top="transform:translate3d(0px, 300%, 0px)"
+            data-top-bottom="transform:translate3d(0px, 0%, 0px)">
+
+        <div
+                class="parallax-image parallax-image-50"
+                style="background-image:url(/img/photowall.jpg)"
+                data-anchor-target="#photowall + .gap"
+                data-bottom-top="transform: translate3d(0px, -60%, 0px);"
+                data-top-bottom="transform: translate3d(0px, 60%, 0px);"
+                ></div>
+    </div>
+
+    <div
+            class="parallax-image-wrapper parallax-image-wrapper-100"
+            data-anchor-target="#library + .gap"
+            data-bottom-top="transform:translate3d(0px, 200%, 0px)"
+            data-top-bottom="transform:translate3d(0px, 0%, 0px)">
+
+        <div
+                class="parallax-image parallax-image-100"
+                style="background-image:url(/img/library.jpg)"
+                data-anchor-target="#library + .gap"
+                data-bottom-top="transform: translate3d(0px, -80%, 0px);"
+                data-top-bottom="transform: translate3d(0px, 80%, 0px);"
+                ></div>
+    </div>
+
+    <div
+            class="parallax-image-wrapper parallax-image-wrapper-100"
+            data-anchor-target="#antiquecamera + .gap"
+            data-bottom-top="transform:translate3d(0px, 200%, 0px)"
+            data-top-bottom="transform:translate3d(0px, 0%, 0px)">
+
+        <div
+                class="parallax-image parallax-image-100"
+                style="background-image:url(/img/antiquecamera.jpg)"
+                data-anchor-target="#antiquecamera + .gap"
+                data-bottom-top="transform: translate3d(0px, -80%, 0px);"
+                data-top-bottom="transform: translate3d(0px, 80%, 0px);"
+                ></div>
+    </div>
+
+    <div id="skrollr-body">
+        <div id="gallery">
+            {#% include '_navbar.twig' %#}
+        </div>
+        <div class="gap gap-75" style="background-image:url(/img/gallery.jpg);">
+            <div style="text-align: right; padding: 10px;">
+                {% if app.user %}
+                    <a href="{{ path('my-gallery') }}" class="btn btn-transparent">View your gallery</a>
+                {% else %}
+                    <a href="{{ path('login') }}" class="btn btn-transparent">Sign in</a>
+                {% endif %}
+            </div>
         </div>
 
-        <main>
-
-            <section id="slide-1" class="homeSlide">
-                <div class="bcg"
-                     data-center="background-position: 50% 0px;"
-                     data-top-bottom="background-position: 50% -100px;"
-                     data-anchor-target="#slide-1"
-                >
-                    <div class="hsContainer">
-                        <div class="hsContent"
-                             data-center="bottom: 20px; opacity: 1"
-                             data-top="bottom: 1200px; opacity: 0"
-                             data-anchor-target="#slide-1 h2"
-                        >
-                            <h2>
-                                Photo Gallery
-                                <small>for Google Drive&trade;</small>
-                            </h2>
+        <div class="content" id="photowall">
+            <div style="text-align: center; min-height: 25%;">
+                <div style="display: inline-block; text-align: left;">
+                    <img src="/img/drivegal-logo-128.png" width="60" height="60" style="float: left;">
+                    <div style="float: left; padding: 5px 10px; line-height: 1.1;">
+                        <div style="font-size: 30px; font-weight: bold;">
+                            Photo Gallery
                         </div>
+                        <div style="font-size:20px;">for Google Drive</div>
                     </div>
                 </div>
-            </section>
+                <p class="lead">
+                    A free web gallery for the photos and videos you share on
+                    <a href="http://drive.google.com">Google Drive&trade;</a>.
+                </p>
+            </div>
 
-            <section id="slide-2" class="homeSlide">
-                <div class="bcg"
-                     data-center="background-position: 50% 0px;"
-                     data-top-bottom="background-position: 50% -100px;"
-                     data-bottom-top="background-position: 50% 100px;"
-                     data-anchor-target="#slide-2"
-                >
-                    <div class="hsContainer">
-                        <div class="hsContent"
-                             data-center="opacity: 1"
-                             data-center-top="opacity: 0"
-                             data--100-bottom="opacity: 0;"
-                             data-anchor-target="#slide-2"
-                        >
-                            <h2>Take photos.</h2>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <div class="container">
+                <h1>Getting started is easy.</h1>
 
-            <section id="slide-3" class="homeSlide">
-                <div class="bcg"
-                    data-center="background-position: 50% 0px;"
-                    data-top-bottom="background-position: 50% -100px;"
-                    data-bottom-top="background-position: 50% 100px;"
-                    data-anchor-target="#slide-3"
-                >
-                    <div class="hsContainer">
-                        <div class="hsContent"
-                            data--50-bottom="opacity: 0;"
-                            data--200-bottom="opacity: 1;"
-                            data-center="opacity: 1"
-                            data-100-top="opacity: 0"
-                            data-anchor-target="#slide-3 h2"
-                        >
-                            <h2>Archive them on Google Drive.</h2>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <p>
+                    First, make sure you have some shared photos in Google Drive:
+                </p>
 
-            <section id="slide-4" class="homeSlide">
-                <div class="bcg"
-                    data-center="background-position: 50% 0px;"
-                    data-top-bottom="background-position: 50% -100px;"
-                    data-bottom-top="background-position: 50% 100px;"
-                    data-anchor-target="#slide-4"
-                >
-                    <div class="hsContainer">
-                        <div class="hsContent"
-                             data-center="opacity: 1"
-                             data-center-top="opacity: 0"
-                             data--100-bottom="opacity: 0;"
-                             data-anchor-target="#slide-4"
-                        >
-                        <!--div class="hsContent"
-                            data-bottom-top="opacity: 0"
-                            data-25p-top="opacity: 0"
-                            data-top="opacity: 1"
-                            data-anchor-target="#slide-4"
-                        -->
-                            <h2>Share them in your gallery, automatically.</h2>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <ol style="padding-left: 40px;">
+                    <li>
+                        <a href="https://drive.google.com/" target="_blank">Create a Google Drive account</a>,
+                        if you don't have one already.
+                    </li>
+                    <li>
+                        <a href="https://support.google.com/drive/answer/2424368" target="_blank">Upload some photos</a> to a folder.
+                    </li>
+                    <li>
+                        <a href="https://support.google.com/drive/answer/2494822?hl=en&ref_topic=2525251" target="_blank">Share the folder</a>
+                        as "public on the web".
+                    </li>
+                </ol>
 
-            <section id="slide-5" class="homeSlide">
-                <div class="bcg"
-                     data-center="background-position: 50% 0px;"
-                     data-top-bottom="background-position: 50% -100px;"
-                     data-bottom-top="background-position: 50% 100px;"
-                     data-anchor-target="#slide-5"
-                        >
-                    <div class="hsContainer">
-                        <div class="hsContent"
-                             data-bottom-top="opacity: 0"
-                             data-25p-top="opacity: 0"
-                             data-top="opacity: 1"
-                             data-anchor-target="#slide-5"
-                                >
-                            <h2>Own your memories.</h2>
+                <p>
+                    Then, activate your gallery:
+                </p>
 
-                            <ul style="">
-                                <li>Archive photos on Google Drive.
-                                <li>Store metadata directly in the files.
-                                <li>Share them here. <span style="font-weight: bold; color: #fff;">Free.</span>
-                            </ul>
+                <p>
+                    <a href="{{ path('setup') }}" class="btn btn-primary btn-lg">Create your gallery now</a>
+                </p>
+            </div>
 
-                            <a href="{{ path('setup') }}" class="btn btn-lg btn-default">Create your gallery now</a>
+        </div>
+        <div class="gap gap-50" style="background-image:url(/img/photowall.jpg);"></div>
 
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-        </main>
+        <div class="content" id="library">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <!--script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.9.1.min.js"><\/script>')</script-->
-        <script src="/js/lib/imagesloaded.js"></script>
-        <script src="/js/lib/enquire.min.js"></script>
-        <script src="/js/lib/skrollr.js"></script>
-        <script src="/js/homepage.js"></script>
+            <div class="container">
+                <h1>How does it work?</h1>
 
-    </body>
+                <p>
+                    It's simple, and mostly automatic.
+                </p>
+
+                <p>
+                    Your gallery is created automatically when you give us permission to connect to your Google Drive.
+                    Assuming you already have a Google Drive account,
+                    there's no need to register or configure anything.
+                </p>
+
+                <p>
+                    Your gallery is given an easy-to-remember web address (URL).
+                    It's named after your Google account by default,
+                    but you can change that.
+                    Your gallery is visible to anyone who has the URL.
+                </p>
+
+                <p>
+                    When someone views your gallery,
+                    we look up your publicly shared folders on Google Drive and show them as photo albums.
+                    (Only folders shared as "public on the web" are included in your gallery.)
+                </p>
+
+                <p>
+                    Any photos or videos in your public folders are shown as thumbnails in your photo albums.
+                    They can be viewed in a lightbox along with their titles, descriptions, and other metadata.
+                </p>
+
+                <p>
+                    <a href="{{ path('gallery', { gallery_slug: 'demo'}) }}">View a sample gallery.</a>
+                </p>
+
+                <p style="margin-bottom: 50px;">
+                    <a href="{{ path('setup') }}" class="btn btn-lg btn-primary">Create your gallery now</a>
+                </p>
+
+            </div>
+
+        </div>
+        <div class="gap gap-50" style="background-image:url(/img/library.jpg);"></div>
+
+
+        <div class="content" id="antiquecamera">
+
+            <div class="container">
+                <h1>Why archive photos on Google Drive?</h1>
+
+                <p>
+                    Don't rely on a social network to archive your photos.
+                    You may find it's hard to get them back out.
+                </p>
+                <p>
+                    Any descriptions or tags you add to your photos will be in the social network's database,
+                    not in your image file.
+                    So they'll be lost when viewing your photos elsewhere.
+                </p>
+
+                <p>
+                    A smarter approach is to store the originals of your photos on a synchronizing file service like Google Drive or Dropbox.
+                    Add descriptions and other metadata directly in the file itself (using an EXIF editor).
+                    <i>Then</i> upload the file to social networks, if you like.
+                </p>
+
+                <p>
+                    This lets you keep control of your photos and videos,
+                    and makes it easy to back them up and access them wherever you choose without losing important metadata.
+                </p>
+                <p>
+                    Think of it as keeping the photographic "negatives" in a safe place and sharing prints,
+                    rather than giving away the negatives themselves.
+                </p>
+            </div>
+        </div>
+
+        <!--div style="background-image:url(/img/antiquecamera.jpg); height: 100%; background-size: 100%; background-repeat: no-repeat;"> </div-->
+
+        <div class="gap gap-100" style="background-image:url(/img/antiquecamera.jpg);"></div>
+
+        <div class="content">
+            <div class="container">
+                <h1>Who's behind this?</h1>
+
+                <p>
+                    I'm Jason Grimes,
+                    a web developer in Raleigh, North Carolina.
+                </p>
+                <p>
+                    I built this as a personal project,
+                    to scratch an itch and to experiment a little.
+                    It's released as open source (under the MIT license).
+                    Get the <a href="https://github.com/jasongrimes/drivegal">source code on Github</a> if you're interested.
+                </p>
+                <p>
+                    You can contact me at <a href="mailto:jason@grimesit.com">jason@grimesit.com</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/lib/jquery/jquery-1.11.1.min.js"></script>
+    <script src="/css/lib/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/lib/skrollr.js"></script>
+    <script type="text/javascript">
+        skrollr.init({
+            smoothScrolling: false,
+            mobileDeceleration: 0.004
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            // When opening the collapsed navbar (on mobile), automatically expand the dropdowns inside it.
+            $('.navbar').on('shown.bs.collapse', function(e) {
+                $(e.target).find('.dropdown-toggle').dropdown('toggle');
+            });
+        });
+    </script>
+</body>
+
 </html>
-

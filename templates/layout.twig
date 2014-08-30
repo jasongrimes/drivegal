@@ -43,47 +43,8 @@
     </head>
     <body>
         <div id="wrap">
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="{{ path('homepage') }}" style="margin-top: -5px;">
-                            <img src="/img/drivegal-logo-128.png" style="float: left; width: 45px; margin: -5px 5px 0px 0px;">
-                            <div style="float: left; margin-top: -2px; color: #666;">
-                                <div style="font-weight: bold; font-size: 24px;">Photo Gallery</div>
-                                <div style="font-size: 14px;">for Google Drive</div>
-                            </div>
-                        </a>
-                    </div>
 
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
-                            <!--li><a href="{{ path('homepage') }}">About</a></li-->
-                            {% if app.user %}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.name }} <span class="caret"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="{{ path('my-gallery') }}">View your gallery</a></li>
-                                        <li><a href="{{ path('settings') }}">Settings</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="{{ path('logout') }}">Sign out</a></li>
-                                    </ul>
-                                </li>
-                            {% else %}
-                                <li><a href="{{ path('setup') }}">Create Gallery</a></li>
-                                <li><a href="{{ path('login') }}">Sign in</a></li>
-                            {% endif %}
-                        </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
+            {% include '_navbar.twig' %}
 
             <div id="main" class="container-fluid">
                 {% if app.session.getFlashBag.peek('success') %}
@@ -107,10 +68,9 @@
                 <img src="/img/drive_white-small.png" width="135" style="margin-right: 20px; float: left;">
                 <div style="margin-top: 17px; display: inline-block; float: right;">
                     &copy; 2014 Jason Grimes.
-                    Gallery contents copyright their respective owners.
+                    Gallery contents are copyright their respective owners.
                 </div>
             </div>
-
         </div>
 
         <script src="/js/lib/jquery/jquery-1.11.1.min.js"></script>

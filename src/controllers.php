@@ -100,7 +100,7 @@ $app->get('/setup', function() use ($app) {
 $app->get('/oauth', function(Application $app, Request $request) {
     if ($error_code = $request->query->get('error')) {
         if ($error_code == 'access_denied') { // The user refused to grant access.
-            $error = 'The connection attempt was canceled. (You chose not to grant access.)';
+            $error = 'The connection attempt was canceled.';
         } else {
             $error = 'Connection failed with the following error: "' . $error_code . '"';
         }
