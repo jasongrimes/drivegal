@@ -60,7 +60,12 @@ Photo Gallery for Google Drive TODO list
     - [x] Put a proper header with a big logo and a sign in / user info box.
     - [x] Make it all work well on mobile
     - [x] Use smaller image sizes
-* [ ] Set up a demo gallery
+* [x] Set up a demo gallery
+* [ ] Clarify what's next after creating a gallery.
+* [ ] De-emphasize the deactivate gallery option in the settings page
+* [ ] Don't show the "album has no photos" message if it has sub-albums.
+* [ ] Don't loop around when reaching the end of the gallery
+* [ ] Update config/local-dist.php
 * [ ] Use it in the real world for awhile
 * [ ] Tweak behavior to fit our photo workflow
 * [ ] Be smarter about the title. Consider that a good workflow is to name the file for the title. Hide the file extension if it's at the end of the title. If the title is `IMG_*.{extension}`, hide it altogether. Use the date for the caption if there's no title or description.
