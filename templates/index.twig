@@ -135,7 +135,7 @@
         }
 
         .content-full {
-            height:100%;
+            min-height:100%;
         }
 
         #done {
@@ -251,7 +251,7 @@
             </div>
         </div>
 
-        <div class="content" id="photowall">
+        <div class="content content-full" id="photowall">
             <div style="text-align: center; min-height: 25%;">
                 <div style="display: inline-block; text-align: left;">
                     <img src="/img/drivegal-logo-128.png" width="60" height="60" style="float: left;">
@@ -268,7 +268,7 @@
                 </p>
             </div>
 
-            <div class="container">
+            <div class="container" style="margin-top: 40px;">
                 <h1>Getting started is easy.</h1>
 
                 <p>
@@ -289,7 +289,7 @@
                     </li>
                 </ol>
 
-                <p>
+                <p style="margin-top: 30px;">
                     Then, activate your gallery:
                 </p>
 
@@ -302,7 +302,7 @@
         <div class="gap gap-50" style="background-image:url(/img/photowall.jpg);"></div>
 
 
-        <div class="content" id="library">
+        <div class="content content-full" id="library">
 
             <div class="container">
                 <h1>How does it work?</h1>
@@ -313,12 +313,11 @@
 
                 <p>
                     Your gallery is created automatically when you give us permission to connect to your Google Drive.
-                    Assuming you already have a Google Drive account,
-                    there's no need to register or configure anything.
+                    There's no need to register or configure anything.
                 </p>
 
                 <p>
-                    Your gallery is given an easy-to-remember web address (URL).
+                    You get an easy-to-remember web address (URL).
                     It's named after your Google account by default,
                     but you can change that.
                     Your gallery is visible to anyone who has the URL.
@@ -327,12 +326,14 @@
                 <p>
                     When someone views your gallery,
                     we look up your publicly shared folders on Google Drive and show them as photo albums.
-                    (Only folders shared as "public on the web" are included in your gallery.)
+                    (Only folders shared as "public on the web" are included.)
                 </p>
 
                 <p>
                     Any photos or videos in your public folders are shown as thumbnails in your photo albums.
-                    They can be viewed in a lightbox along with their titles, descriptions, and other metadata.
+                    Click or tap a thumbnail to view it full size in a lightbox.
+                    Click or tap the full size image to toggle display of captions and other metadata.
+                    Drag or swipe to flip to the next photo.
                 </p>
 
                 <p>
@@ -349,7 +350,7 @@
         <div class="gap gap-50" style="background-image:url(/img/library.jpg);"></div>
 
 
-        <div class="content" id="antiquecamera">
+        <div class="content content-full" id="antiquecamera">
 
             <div class="container">
                 <h1>Why archive photos on Google Drive?</h1>
