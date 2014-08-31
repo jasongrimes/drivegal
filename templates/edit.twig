@@ -6,20 +6,31 @@
             <p>
                 <strong>OK!</strong>
                 We've successfully connected to your Google Drive account.
-                If you like, you can edit your gallery's URL below.
             </p>
             <p>
-                Or, <a href="/{{ gallery.slug }}">just check out your gallery now!</a>.
+                You can view your gallery at the URL below.
+                You can also change the gallery name and URL, if you like.
+            </p>
+            <p>
+                You can get back to this page at any time by selecting
+                <strong>{{ app.user.name }} &raquo; Settings</strong> from the main menu.
             </p>
         </div>
     {% endif %}
 
-    <h1>Your gallery settings</h1>
+    <h1>Gallery settings</h1>
 
-    <p>
-        View your gallery here:
-        <a href="{{ galleryUrl }}">{{ galleryUrl }}</a>
-    </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">View your gallery here</h3>
+        </div>
+        <div class="panel-body">
+            <a style="float: left; margin: 0px 20px 5px 0px;" class="lead" href="{{ galleryUrl }}">{{ galleryUrl }}</a>
+            <div style="float: left;" id="share-button"></div>
+        </div>
+    </div>
+
+    <h2>Edit settings</h2>
 
     <form role="form" method="POST">
         <div class="form-group">
@@ -34,7 +45,7 @@
                    required>
         </div>
         <div class="form-group">
-            <label for="inputSlug">Web address</label>
+            <label for="inputSlug">Web address (URL)</label>
             <div class="input-group">
                 <div class="input-group-addon">http://drivegal.com/</div>
                 <input type="text"
@@ -56,7 +67,10 @@
         <a href="{{ path('my-gallery') }}" class="btn btn-link">Cancel</a>
     </form>
 
-    <div class="panel panel-danger" style="margin-top: 100px;">
+    <button id="deactivate-panel-toggle" class="btn btn-link" style="color: #a94442; padding: 0px; margin: 35px 0px 10px 0px;">
+        Deactivate your gallery...
+    </button>
+    <div id="deactivate-panel" class="panel panel-danger" style="display: none;">
         <div class="panel-heading">
             <h2 class="panel-title">Deactivate your gallery</h2>
         </div>
@@ -71,3 +85,29 @@
     </div>
 
 {% endblock %}
+
+{% block footer %}
+    <script src="/js/lib/share.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            new Share('#share-button', {
+                url: "{{ galleryUrl }}",
+                title: "{{ galleryInfo.galleryName }} | Photo Gallery for Google Drive",
+                description: "Check out my photo gallery!",
+                image: "http://drivegal.com/img/drivegal-logo-128.png",
+                ui: {
+                    flyout: "top right"
+                },
+                networks: {
+                    email: {
+                        title: "Check out my photo gallery!",
+                        description: "Check out my online photo gallery: {{ galleryUrl }}"
+                    }
+                }
+            });
+
+            $('#deactivate-panel-toggle').on('click', function() { $('#deactivate-panel').toggle(); });
+        });
+    </script>
+{% endblock %}
+

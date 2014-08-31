@@ -96,7 +96,9 @@ $app->get('/setup', function() use ($app) {
 ->bind('setup')
 ;
 
-// Controller: Handle OAuth redirects from Google.
+//
+// Controller: Handle OAuth redirects from Google to authorize a gallery.
+//
 $app->get('/oauth', function(Application $app, Request $request) {
     if ($error_code = $request->query->get('error')) {
         if ($error_code == 'access_denied') { // The user refused to grant access.
@@ -111,8 +113,8 @@ $app->get('/oauth', function(Application $app, Request $request) {
 
     $auth_result = $app['authenticator']->authorizeGallery($request->query->get('code'));
     if ($auth_result['success']) {
-        $app['session']->getFlashBag()->add('success', 'Successfully connected to your Google Drive account.');
-        // return $app->redirect('/' . $auth_result['galleryInfo']->getSlug());
+        $app['session']->getFlashBag()->add('just-connected', true);
+        // $app['session']->getFlashBag()->add('success', 'Successfully connected to your Google Drive account.');
 
         return $app->redirect($app['url_generator']->generate('settings'));
     } else {

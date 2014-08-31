@@ -61,8 +61,9 @@ Photo Gallery for Google Drive TODO list
     - [x] Make it all work well on mobile
     - [x] Use smaller image sizes
 * [x] Set up a demo gallery
-* [ ] Clarify what's next after creating a gallery.
-* [ ] De-emphasize the deactivate gallery option in the settings page
+* [x] Clarify what's next after creating a gallery.
+* [x] De-emphasize the deactivate gallery option in the settings page
+* [x] Add a share button to the gallery URL in the settings page
 * [ ] Don't show the "album has no photos" message if it has sub-albums.
 * [ ] Don't loop around when reaching the end of the gallery
 * [ ] Update config/local-dist.php
