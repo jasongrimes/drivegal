@@ -6,9 +6,21 @@
 
     <h1>Create your gallery</h1>
 
-    <div class="well">
+    <p>
+        Click below to connect to your Google Drive account and create a gallery for the photos and videos you've shared publicly.
+    </p>
+
+    <p>
+        Google will ask your permission to let us access that information.
+    </p>
+
+    <p>
+        <a class="btn btn-primary" href="{{ auth_url }}">Connect to Google Drive and Create Gallery</a>
+    </p>
+
+    <div class="well" style="margin-top: 40px;">
         <p>
-            First, make sure you have photos available to share:
+            Before creating a gallery, make sure you have some photos available to share:
         </p>
 
         <ol class="double-spaced">
@@ -25,18 +37,6 @@
                 (<em>Only your public folders</em> will be shown as albums in your photo gallery.)
             </li>
         </ol>
-    </div>
-
-    <p>
-        Just click the button below to create a gallery with your publicly visible photos and videos from Google Drive.
-    </p>
-
-    <p>
-        Google will ask for your permission to share that information with us.
-    </p>
-
-    <div style="margin-top: 20px;">
-        <a class="btn btn-primary" href="{{ auth_url }}">Connect to your Google Drive</a>
     </div>
 
 
