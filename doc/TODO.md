@@ -54,12 +54,12 @@ Photo Gallery for Google Drive TODO list
     - [x] Make a form and controller for editing (my) gallery settings
     - [x] Redirect to gallery settings page after creating a gallery
     - [x] Give an option to disconnect from Google Drive
-* [ ] Rework the landing page
+* [x] Rework the landing page
     - [x] Show a classic parallax effect with content gaps between images. See [here](https://github.com/Prinzhorn/skrollr/tree/master/examples#examples)
     - [x] Rewrite the content sections.
     - [x] Put a proper header with a big logo and a sign in / user info box.
     - [x] Make it all work well on mobile
-    - [ ] Use smaller image sizes
+    - [x] Use smaller image sizes
 * [ ] Set up a demo gallery
 * [ ] Use it in the real world for awhile
 * [ ] Tweak behavior to fit our photo workflow
