@@ -12,9 +12,9 @@
 
     {% include '_subalbums.twig' %}
 
-    {% if files is empty %}
+    {% if files is empty and subAlbums is empty %}
         <div class="alert alert-warning">
-            This album has no photos or videos.
+            This album is empty.
         </div>
     {% endif %}
 
