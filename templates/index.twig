@@ -268,7 +268,7 @@
                 </p>
             </div>
 
-            <div class="container" style="margin-top: 50px;">
+            <div id="first-text" class="container" style="margin-top: 0px;">
                 <h1>Setup is easy</h1>
 
                 <p>
@@ -333,7 +333,7 @@
                     Any photos or videos in your public folders are shown as thumbnails in your photo albums.
                     Click or tap a thumbnail to view it full size in a lightbox.
                     Click or tap the full size image to toggle display of captions and other metadata.
-                    Drag or swipe to flip to the next photo.
+                    Page through photos using arrow keys or touch swiping (on mobile devices).
                 </p>
 
                 <p>
@@ -416,11 +416,25 @@
         });
     </script>
     <script type="text/javascript">
+        // Make sure the info text starts below the fold.
+        // Cheating here because I gave up trying to make it work in CSS at all resolutions.
+        function moveFirstTextBelowTheFold() {
+            var $firstText = $('#first-text'),
+                    pixelBleed = $(window).height() - $firstText.position().top;
+            if (pixelBleed > 0) {
+                $firstText.css('margin-top', pixelBleed + 'px');
+            }
+        }
+
         $(function() {
             // When opening the collapsed navbar (on mobile), automatically expand the dropdowns inside it.
             $('.navbar').on('shown.bs.collapse', function(e) {
                 $(e.target).find('.dropdown-toggle').dropdown('toggle');
             });
+
+            moveFirstTextBelowTheFold();
+            $(window).on('resize', function() { moveFirstTextBelowTheFold(); });
+
         });
     </script>
 </body>
