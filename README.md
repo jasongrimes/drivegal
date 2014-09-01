@@ -1,4 +1,5 @@
 drivegal
 ========
 
-A photo gallery for Google Drive, accessible at http://drivegal.com
+The source code for [drivegal.com](http://drivegal.com),
+a free web gallery for photos and videos shared on Google Drive.
