@@ -61,17 +61,21 @@ Photo Gallery for Google Drive TODO list
     - [x] Make it all work well on mobile
     - [x] Use smaller image sizes
 * [x] Set up a demo gallery
-* [x] Clarify what's next after creating a gallery.
-* [x] De-emphasize the deactivate gallery option in the settings page
-* [x] Add a share button to the gallery URL in the settings page
-* [x] Don't show the "album has no photos" message if it has sub-albums.
-* [ ] Don't loop around when reaching the end of the gallery
-* [ ] Update config/local-dist.php
-* [ ] Use it in the real world for awhile
-* [ ] Tweak behavior to fit our photo workflow
-* [ ] Be smarter about the title. Consider that a good workflow is to name the file for the title. Hide the file extension if it's at the end of the title. If the title is `IMG_*.{extension}`, hide it altogether. Use the date for the caption if there's no title or description.
-* [ ] Set up a reserved EC2 instance to keep costs down.
-* [ ] Figure out how to close/slide after viewing a video on mobile. (Need to leave some free space around a border for the touch gestures?)
+* [ ] Usability tweaks
+    - [x] Clarify what's next after creating a gallery.
+    - [x] De-emphasize the deactivate gallery option in the settings page
+    - [x] Add a share button to the gallery URL in the settings page
+    - [x] Don't show the "album has no photos" message if it has sub-albums.
+    - [x] Don't loop around when reaching the end of the gallery
+    - [ ] Be smarter about the title.
+          Consider that a good workflow is to name the file for the title.
+          Hide the file extension if it's at the end of the title.
+          If the title is `IMG_*.{extension}`, hide it altogether.
+          Use the date for the caption if there's no title or description.
+    - [ ] Figure out how to close/slide after viewing a video on mobile. (Need to leave some free space around a border for the touch gestures?)
+* [ ] Put the backend to bed
+    - [ ] Update config/local-dist.php
+    - [ ] Set up a reserved EC2 instance to keep costs down.
 
 Package up code for sharing
 
