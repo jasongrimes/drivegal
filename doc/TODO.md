@@ -61,6 +61,10 @@ Photo Gallery for Google Drive TODO list
     - [x] Make it all work well on mobile
     - [x] Use smaller image sizes
 * [x] Set up a demo gallery
+* [x] Put the backend to bed
+    - [x] Update config/local-dist.php
+    - [x] Set up a reserved EC2 instance to keep costs down.
+    - [x] Set up Google Analytics
 * [ ] Usability tweaks
     - [x] Clarify what's next after creating a gallery.
     - [x] De-emphasize the deactivate gallery option in the settings page
@@ -73,9 +77,6 @@ Photo Gallery for Google Drive TODO list
           If the title is `IMG_*.{extension}`, hide it altogether.
           Use the date for the caption if there's no title or description.
     - [ ] Figure out how to close/slide after viewing a video on mobile. (Need to leave some free space around a border for the touch gestures?)
-* [ ] Put the backend to bed
-    - [ ] Update config/local-dist.php
-    - [ ] Set up a reserved EC2 instance to keep costs down.
 
 Package up code for sharing
 
