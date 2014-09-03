@@ -66,7 +66,7 @@ class OAuthSimpleUserProvider implements OAuthUserProviderInterface, UserProvide
         } else {
             // A user with this ID doesn't already exist. Try to create one.
             if ($this->userManager->findBy(array('email' => $email))) {
-                throw new UserDuplicateEmailException('A user account already exists with the email address "' . $email . '"');
+                throw new CreateUserException('A user account already exists with the email address "' . $email . '"');
             }
             $user = $this->userManager->createUser($email, '', $name);
             $user->setCustomField('googleUserId', $googleUserId);
