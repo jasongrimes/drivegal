@@ -308,9 +308,6 @@ class GalleryService
             $class = 'Drivegal\GalleryFile\Image';
         } elseif (strpos($driveFile->getMimeType(), 'video/') !== false) {
             $class = 'Drivegal\GalleryFile\Movie';
-            // $viewUrl = $driveFile->getEmbedLink();
-            // $viewUrl = $album->getOriginalFileUrl() . '/' . $driveFile->getOriginalFilename();
-            // echo '<pre>' . print_r($driveFile, true) . '</pre>';
             $playUrl = preg_replace('/edit/', 'preview', $driveFile->getAlternateLink()); // alternateLink is "A link for opening the file in using a relevant Google editor or viewer."
         }
 
@@ -319,7 +316,12 @@ class GalleryService
         }
 
         /** @var GalleryFile $galleryFile */
-        $galleryFile = new $class($driveFile->getId(), $driveFile->getTitle(), $driveFile->getThumbnailLink(), $this->changeThumbnailLinkSize($driveFile->getThumbnailLink(), 1000));
+        $galleryFile = new $class(
+            $driveFile->getId(),
+            $driveFile->getTitle(),
+            $this->changeThumbnailLinkSize($driveFile->getThumbnailLink(), 400),
+            $this->changeThumbnailLinkSize($driveFile->getThumbnailLink(), 1000)
+        );
 
         $galleryFile->setParentIds($this->getParentIdsFromDriveFile($driveFile));
         $galleryFile->setDescription($driveFile->getDescription());
