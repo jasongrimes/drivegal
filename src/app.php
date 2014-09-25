@@ -12,6 +12,8 @@ use Drivegal\Authenticator;
 use Drivegal\GalleryInfoMapper;
 use Drivegal\GalleryService;
 use Drivegal\OAuthSimpleUserProvider;
+use CHH\Silex\CacheServiceProvider;
+use Kilte\Silex\Pagination\PaginationServiceProvider;
 
 $app = new Application();
 $app->register(new UrlGeneratorServiceProvider());
@@ -44,7 +46,7 @@ $app['gallery.info.mapper'] = $app->share(function($app) {
     return new GalleryInfoMapper($app['db'], $app['slugify']);
 });
 $app['gallery'] = $app->share(function($app) {
-   return new GalleryService($app['authenticator'], $app['gallery.info.mapper'], $app['slugify']);
+   return new GalleryService($app['authenticator'], $app['gallery.info.mapper'], $app['slugify'], $app['cache']);
 });
 
 $app->register(new DoctrineServiceProvider());
@@ -81,7 +83,13 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 $app->register(new \Silex\Provider\RememberMeServiceProvider());
-
 $app->register(new SimpleUser\UserServiceProvider());
+
+$app->register(new CacheServiceProvider, array(
+    'cache.options' => array("default" => array(
+        "driver" => "apc"
+    ))
+));
+$app->register(new PaginationServiceProvider, array('pagination.per_page' => 100));
 
 return $app;

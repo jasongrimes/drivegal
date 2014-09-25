@@ -1,0 +1,48 @@
+<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <div class="slides"></div>
+    <div class="caption">
+        <h3 class="title"></h3>
+        <p class="description"></p>
+        <p class="date"></p>
+        <p class="camera"></p>
+    </div>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator hidden-xs"></ol>
+</div>
+
+<div id="thumbnails">
+    {% for file in files %}
+        {% set caption = file.caption|replace("\\n", " ") %}
+        <div class="thumbnail {{ file.type }}">
+            <a
+                    {% if file.type == "movie" %}
+                        href="{{ file.playUrl }}"
+                        type="text/html"
+                        data-poster="{{ file.bigThumbnailUrl }}"
+                        data-iframevid="{{ file.playUrl }}"
+                    {% else %}
+                        href="{{ file.bigThumbnailUrl }}"
+                        type="{{ file.mimeType }}"
+                        data-camera="{{ file.cameraMake }} {{ file.cameraModel }}"
+                    {% endif %}
+                    title="{{ caption }}"
+                    data-title="{{ file.title }}"
+                    data-description="{{ file.description }}"
+                    data-date="{{ file.date }}"
+                    >
+                <div class="img-container">
+                    <img src="{{ file.thumbnailUrl }}">
+                    <div class="play-button"></div>
+                </div>
+                <div class="caption truncate">
+                    {{ caption }}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+

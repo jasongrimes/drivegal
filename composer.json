@@ -21,7 +21,9 @@
         "cocur/slugify": "dev-master",
         "gigablah/silex-oauth": "~0.1",
         "doctrine/dbal": "~2.4",
-        "jasongrimes/silex-simpleuser": "dev-master"
+        "jasongrimes/silex-simpleuser": "~1.0",
+        "chh/cache-service-provider": "~1.0",
+        "kilte/silex-pagination": "~1.0"
     },
     "autoload": {
         "psr-0": { "Drivegal": "src/" }

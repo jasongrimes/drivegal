@@ -1,0 +1,109 @@
+<script src="/js/lib/blueimp-gallery/js/blueimp-gallery.min.js"></script>
+<script src="/js/blueimp-gallery-iframevid.js"></script>
+<script src="/js/lib/moment/moment.js"></script>
+
+<script>
+    var loading = function() {
+        // $('#overlay').show();
+        $('#loader').show();
+        /*
+        var over = '<div id="overlay"><img id="loading" src="/js/lib/blueimp-gallery/img/loading.gif"></div>';
+        $(over).appendTo('body');
+        */
+    };
+
+    document.getElementById('thumbnails').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+                link = $(target).closest('a')[0],
+                links = this.getElementsByTagName('a'),
+                lastSlideIndex = null;
+        if (!link) return;
+        blueimp.Gallery(links, {
+            index: link,
+            event: event,
+            // continuous: false,
+            onslide: function (index, slide) {
+                //
+                // Handle pagination if wrapping around the beginning or end.
+                //
+                if (index == 0 && lastSlideIndex == links.length - 1) {
+                    this.close();
+                    {% if nextUrl %}
+                        loading();
+                        document.location='{{ nextUrl }}?show=first';
+                    {% endif %}
+                }
+                if (index == links.length - 1 && lastSlideIndex == 0) {
+                    this.close();
+                    {% if prevUrl %}
+                        loading();
+                        document.location='{{ prevUrl }}?show=last';
+                    {% endif %}
+                }
+                //
+                // Set the slide contents.
+                //
+                var details = {
+                    'data-description': '.description',
+                    'data-title': '.title',
+                    'data-date': '.date',
+                    'data-camera': '.camera'
+                }, attr, classname, text, node;
+                for (attr in details) {
+                    if (!details.hasOwnProperty(attr)) continue;
+                    classname = details[attr];
+                    text = this.list[index].getAttribute(attr);
+                    node = this.container.find(classname);
+                    node.empty();
+                    if (text) {
+                        if (attr == 'data-date') {
+                            // The .zone(text) part prevents conversion into the local timezone, showing it in the camera's local time instead.
+                            text = moment(text).zone(text).format('LLL');
+                        }
+                        node[0].appendChild(document.createTextNode(text));
+                    }
+                }
+                lastSlideIndex = index;
+                //
+                // Scroll the thumbnails down to the current image.
+                //
+                $('body').scrollTop($(links[index]).offset().top);
+            },
+            onopened: function() {
+                // $('#overlay').hide();
+                $('#loader').hide();
+            }
+        });
+    };
+
+    {% if showLightboxPhoto %}
+        loading();
+        $(function() {
+            var $links = $('#thumbnails').find('a'),
+                index = {{ showLightboxPhoto == 'last' ? '$links.length - 1' : 0 }};
+            $links[index].click();
+        });
+    {% endif %}
+
+    function resizeThumbnails() {
+        var cols,
+            thumbWidth,
+            windowWidth = $(window).width();
+
+        if (windowWidth <= 400) cols = 2; // Smartphone portrait
+        else if (windowWidth < 1280) cols = 4;
+        else cols = 5;
+
+        thumbWidth = Math.floor($('#main').width() / cols) - 4; // Subtract the thumbnail padding, 2px x 2
+        if (thumbWidth > 300) thumbWidth = 300;
+
+        $('.cropped-thumbnail').css('width', thumbWidth).css('height', thumbWidth);
+    }
+
+    $(function() {
+        resizeThumbnails();
+        $(window).on('resize', function() { resizeThumbnails(); });
+    });
+</script>
+

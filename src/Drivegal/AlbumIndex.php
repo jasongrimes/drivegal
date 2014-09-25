@@ -67,6 +67,21 @@ class AlbumIndex
     }
 
     /**
+     * @param array $ids
+     * @return bool
+     */
+    public function hasAtLeastOneId(array $ids)
+    {
+        foreach ($ids as $id) {
+            if ($this->hasId($id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param Album $album
      * @return bool
      */

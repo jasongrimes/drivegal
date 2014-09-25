@@ -112,4 +112,101 @@ div.thumbnail {
 ol.double-spaced li {
     margin-bottom: 20px;
 }
+#loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('/js/lib/blueimp-gallery/img/loading.gif') 50% 50% / 64px no-repeat rgb(0,0,0);
+}
 
+/*
+#overlay {
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+#loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+}
+*/
+
+/*
+ * Cropped gallery thumbnails.
+ */
+.cropped-thumbnail {
+    /* Small size for smartphone portrait (2 per row), overridden by media queries below. */
+    width: 140px;
+    height: 140px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    float: left;
+    margin: 2px;
+}
+.cropped-thumbnail img {
+    min-height: 100%;
+    min-width: 100%;
+    /* IE 8 */
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    /* IE 5-7 */
+    filter: alpha(opacity=0);
+    /* modern browsers */
+    opacity: 0;
+}
+/* iPhone 5s landscape, fits 4 per row */
+@media (min-width: 321px) {
+    .cropped-thumbnail {
+        width: 130px;
+        height: 130px;
+    }
+}
+@media (min-width: 768px) {
+    .cropped-thumbnail {
+        width: 165px;
+        height: 165px;
+    }
+}
+.cropped-thumbnail .play-button {
+    display: none;
+}
+.cropped-thumbnail.movie .play-button {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    margin: -64px auto 0;
+    width: 128px;
+    height: 128px;
+    background: url(/js/lib/blueimp-gallery/img/video-play.png) center no-repeat;
+    opacity: .6;
+    cursor: pointer;
+}
+.cropped-thumbnail.movie .play-button:hover {
+    opacity: 1;
+}
+.cropped-thumbnail .img-container {
+    position: relative;
+    /*
+    display: table-cell;
+    width: 220px;
+    height: 165px;
+    */
+    vertical-align: middle;
+    text-align: center;
+}

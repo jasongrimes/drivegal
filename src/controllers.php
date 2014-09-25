@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Silex\Application;
 use Drivegal\GalleryInfo;
+use Drivegal\GalleryService;
 use Drivegal\Authenticator;
 use Drivegal\Exception\AlbumNotFoundException;
 use Drivegal\Exception\ServiceAuthException;
@@ -202,17 +203,60 @@ $app->match('/settings', function(Application $app, Request $request) {
 ->bind('settings')
 ;
 
+/*
+//
+// Controller: View a gallery's photostream
+//
+$app->get('/{gallery_slug}/stream/{pg}', function(Application $app, Request $request, GalleryInfo $galleryInfo, $pg) {
+    $galleryService = $app['gallery'];
+    $page = $galleryService->getPhotoStreamPage($galleryInfo, $pg);
+    return renderPhotoStreamPage($page, $app, $request, $galleryInfo);
+})
+->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
+->convert('galleryInfo', $galleryProvider)
+->value('pg', 1)
+->bind('stream-top')
+;
+*/
+
+//
+// Controller: View the top-level album list.
+//
+$app->get('/{gallery_slug}/album/', function(Application $app, GalleryInfo $galleryInfo) {
+    $albumContents = $app['gallery']->getAlbumContents($galleryInfo, '');
+    return $app['twig']->render('album.twig', array(
+        'galleryName' => $galleryInfo->getGalleryName(),
+        'albumTitle' => 'Album list',
+        'subAlbums' => $albumContents->getSubAlbums(),
+        'files' => '',
+        'breadcrumbs' => $albumContents->getBreadcrumbs(),
+        'albumUrl' => $app['url_generator']->generate('album-list', array('gallery_slug' => $galleryInfo->getSlug())),
+        'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
+        'nextUrl' => '',
+        'prevUrl' => '',
+        'showLightboxPhoto' => '',
+        'gallerySlug' => $galleryInfo->getSlug(),
+    ));
+})
+->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash (we have to specify that manually since we override the default regex).
+->convert('galleryInfo', $galleryProvider)
+->bind('album-list')
+;
+
+
 //
 // Controller: View an album in a gallery
 //
-$app->get('/{gallery_slug}/{album_path}/', function(Application $app, GalleryInfo $galleryInfo, $album_path) {
+$app->get('/{gallery_slug}/album/{album_path}/', function(Application $app, GalleryInfo $galleryInfo, $album_path) {
     try {
+        /** @var \Drivegal\AlbumContents $albumContents */
         $albumContents = $app['gallery']->getAlbumContents($galleryInfo, $album_path);
     } catch (AlbumNotFoundException $e) {
         $app['session']->getFlashBag()->add('error', 'Album "' . $album_path . '" not found.');
         return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
     }
 
+    /*
     return $app['twig']->render('album.twig', array(
         'galleryName' => $galleryInfo->getGalleryName(),
         'albumTitle' => $albumContents->getTitle(),
@@ -220,14 +264,36 @@ $app->get('/{gallery_slug}/{album_path}/', function(Application $app, GalleryInf
         'subAlbums' => $albumContents->getSubAlbums(),
         'breadcrumbs' => $albumContents->getBreadcrumbs(),
     ));
+    */
+
+    return $app['twig']->render('album.twig', array(
+        'galleryName' => $galleryInfo->getGalleryName(),
+        'albumTitle' => $albumContents->getTitle(),
+        'files' => $albumContents->getFiles(),
+        'subAlbums' => $albumContents->getSubAlbums(),
+        'breadcrumbs' => $albumContents->getBreadcrumbs(),
+        'albumUrl' => $app['url_generator']->generate('album-list', array('gallery_slug' => $galleryInfo->getSlug())),
+        'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
+        'nextUrl' => '',
+        'prevUrl' => '',
+        'showLightboxPhoto' => '',
+        'gallerySlug' => $galleryInfo->getSlug(),
+        /*
+        'albumUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
+        'streamUrl' => $app['url_generator']->generate('stream', array('gallery_slug' => $galleryInfo->getSlug())),
+        */
+    ));
 })
 ->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash (we have to specify that manually since we override the default regex).
-->assert('album_path', '.+') // album path *can* contain slashes.
+->assert('album_path', '.*') // album path *can* contain slashes.
 ->convert('galleryInfo', $galleryProvider)
+->value('album_path', '')
+->bind('album')
 ;
 
+/*
 //
-// Controller: View a gallery.
+// Controller: View a gallery photo stream.
 //
 $app->get('/{gallery_slug}/', function(Application $app, GalleryInfo $galleryInfo) {
     $albumContents = $app['gallery']->getAlbumContents($galleryInfo, '');
@@ -240,6 +306,7 @@ $app->get('/{gallery_slug}/', function(Application $app, GalleryInfo $galleryInf
 ->convert('galleryInfo', $galleryProvider)
 ->bind('gallery')
 ;
+*/
 
 //
 // Middleware: Determine the current user.
@@ -299,4 +366,39 @@ $app->get('/my-gallery', function(Application $app) {
     return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
 })
 ->bind('my-gallery');
+
+//
+// Controller: View a gallery's photostream
+//
+$app->get('/{gallery_slug}/{pagestr}', function(Application $app, Request $request, GalleryInfo $galleryInfo, $pagestr) {
+    $pg = substr($pagestr, 4); // Strip out the leading "page" string.
+    $page = $app['gallery']->getPhotoStreamPage($galleryInfo, $pg);
+    return renderPhotoStreamPage($page, $app, $request, $galleryInfo);
+})
+->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
+->assert('pagestr', '^page\d+')
+->convert('galleryInfo', $galleryProvider)
+->value('pagestr', 'page1')
+->bind('gallery')
+;
+
+function renderPhotoStreamPage(Drivegal\PhotoStreamPage $page, Application $app, Request $request, GalleryInfo $galleryInfo)
+{
+    $nextUrl = $page->getNextPage()
+        ? $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug(), 'pagestr' => 'page' . $page->getNextPage()))
+        : '';
+    $prevUrl = $page->getPrevPage()
+        ? $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug(), 'pagestr' => 'page' . $page->getPrevPage()))
+        : '';
+
+    return $app['twig']->render('stream.twig', array(
+        'galleryName' => $galleryInfo->getGalleryName(),
+        'files' => $page->getFiles(),
+        'nextUrl' => $nextUrl,
+        'prevUrl' => $prevUrl,
+        'albumUrl' => $app['url_generator']->generate('album-list', array('gallery_slug' => $galleryInfo->getSlug())),
+        'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
+        'showLightboxPhoto' => $request->query->get('show'),
+    ));
+}
 

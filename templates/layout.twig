@@ -30,11 +30,12 @@
         {% block css '' %}
     </head>
     <body>
+        {% block bodyTop '' %}
         <div id="wrap">
 
             {% include '_navbar.twig' %}
 
-            <div id="main" class="container">
+            <div id="main" class="{% block containerClass 'container' %}">
                 {% if app.session.getFlashBag.peek('success') %}
                     <div class="alert alert-success" role="alert">
                         <strong>OK!</strong> {% for msg in app.session.getFlashBag.get('success') %}{{ msg }}<br/>{% endfor %}

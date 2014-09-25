@@ -15,6 +15,7 @@ use Drivegal\GalleryFile\Album;
 use Drivegal\GalleryFile\Image;
 use Drivegal\GalleryFile\Movie;
 use \DateTime;
+use Doctrine\Common\Cache\Cache;
 
 class GalleryService
 {
@@ -27,16 +28,23 @@ class GalleryService
     /** @var Slugify */
     protected $slugify;
 
+    /** @var Cache */
+    protected $cache;
+
+    protected $cacheTtl = 900;
+
     /**
      * @param Authenticator $authenticator
      * @param GalleryInfoMapper $galleryInfoMapper
      * @param Slugify $slugify
+     * @param Cache $cache
      */
-    public function __construct(Authenticator $authenticator, GalleryInfoMapper $galleryInfoMapper, Slugify $slugify)
+    public function __construct(Authenticator $authenticator, GalleryInfoMapper $galleryInfoMapper, Slugify $slugify, Cache $cache)
     {
         $this->authenticator = $authenticator;
         $this->galleryInfoMapper = $galleryInfoMapper;
         $this->slugify = $slugify;
+        $this->cache = $cache;
     }
 
     /**
@@ -88,7 +96,12 @@ class GalleryService
                     throw new AlbumNotFoundException();
                 }
 
-                $files = $this->fetchGalleryFiles($driveService, $album);
+                $files = $this->fetchGalleryFiles($driveService, array('album' => $album));
+
+                // Order files in reverse chronological order.
+                uasort($files, function(GalleryFile $a, GalleryFile $b) {
+                    return strcmp($b->getDate(), $a->getDate());
+                });
             }
 
         } catch (Google_Auth_Exception $e) {
@@ -126,8 +139,9 @@ class GalleryService
     {
         $breadcrumbs = array();
 
-        $path = $galleryInfo->getSlug() . '/';
-        $breadcrumbs[$path] = $galleryInfo->getGalleryName();
+        $path = $galleryInfo->getSlug() . '/album/';
+        // $breadcrumbs[$path] = $galleryInfo->getGalleryName();
+        $breadcrumbs[$path] = 'Albums';
 
         $albumSlugs = explode('/', $albumPath);
         array_pop($albumSlugs); // The last one in the path is the current page, not part of the breadcrumb trail.
@@ -219,44 +233,74 @@ class GalleryService
 
     /**
      * @param Google_Service_Drive $driveService
-     * @param Album $album
+     * @param array $criteria An array of criteria, with the following optional keys:<pre>
+     *     album - (Album) Get files in this album.
+     * </pre>
+     * @param AlbumIndex $albumIndex If set, ensure that files have at least one parent album in this index (for filtering out files not in public albums).
      * @return GalleryFile[]
      */
-    protected function fetchGalleryFiles(Google_Service_Drive $driveService, Album $album)
+    protected function fetchGalleryFiles(Google_Service_Drive $driveService, $criteria = array(), AlbumIndex $albumIndex = null)
     {
         $files = array();
 
-        $q = 'trashed=false
-                and "' . $album->getId() . '" in parents
-                and (mimeType contains "image/" or mimeType contains "video/")';
+        $q = 'trashed=false and (mimeType contains "image/" or mimeType contains "video/") ';
+        if (array_key_exists('album', $criteria) && $criteria['album'] instanceof Album) {
+            $q .= 'and "' . $criteria['album']->getId() . '" in parents ';
+        }
 
-        // TODO: Specify the few fields we actually need to conserve bandwidth?
-        $driveFiles = $driveService->files->listFiles(array(
-            'q' => $q,
-            'maxResults' => 1000,
-            // 'fields' => '"items(createdDate,description,downloadUrl,mimeType,originalFilename,parents,thumbnailLink,title,webContentLink,webViewLink)"',
-        ));
-
-        foreach ($driveFiles as $driveFile) { /** @var Google_Service_Drive_DriveFile $driveFile */
-            if ($galleryFile = $this->createGalleryFileFromDriveFile($driveFile, $album)) {
+        $driveFiles = $this->fetchAllDriveFiles($driveService, $q);
+        foreach ($driveFiles as $driveFile) {
+            if ($galleryFile = $this->createGalleryFileFromDriveFile($driveFile)) {
+                if ($albumIndex && !$albumIndex->hasAtLeastOneId($galleryFile->getParentIds())) {
+                    continue;
+                }
                 $files[$galleryFile->getId()] = $galleryFile;
             }
         }
-
-        // Order files in reverse chronological order.
-        uasort($files, function(GalleryFile $a, GalleryFile $b) {
-            return strcmp($b->getDate(), $a->getDate());
-        });
 
         return $files;
     }
 
     /**
+     * @param Google_Service_Drive $driveService
+     * @param string $q
+     * @return Google_Service_Drive_DriveFile[]
+     * @throws Exception\ServiceException
+     */
+    protected function fetchAllDriveFiles(Google_Service_Drive $driveService, $q)
+    {
+        $result = array();
+        $pageToken = null;
+
+        // TODO: Specify the few fields we actually need to conserve bandwidth?
+        $parameters = array(
+            'q' => $q,
+            'maxResults' => 1000,
+        );
+
+        do {
+            try {
+                if ($pageToken) {
+                    $parameters['pageToken'] = $pageToken;
+                }
+                $files = $driveService->files->listFiles($parameters);
+
+                $result = array_merge($result, $files->getItems());
+                $pageToken = $files->getNextPageToken();
+            } catch (\Exception $e) {
+                throw new ServiceException($e->getMessage(), $e->getCode(), $e);
+                $pageToken = null;
+            }
+        } while ($pageToken);
+
+        return $result;
+    }
+
+    /**
      * @param Google_Service_Drive_DriveFile $driveFile
-     * @param Album $album
      * @return GalleryFile|null
      */
-    protected function createGalleryFileFromDriveFile(Google_Service_Drive_DriveFile $driveFile, Album $album)
+    protected function createGalleryFileFromDriveFile(Google_Service_Drive_DriveFile $driveFile)
     {
         $class = $playUrl = null;
 
@@ -294,7 +338,7 @@ class GalleryService
             $galleryFile->setDate($datetime->format(DATE_ISO8601));
         }
         $galleryFile->setOriginalFilename($driveFile->getOriginalFilename());
-        $galleryFile->setOriginalFileUrl($album->getOriginalFileUrl() . $driveFile->getOriginalFilename());
+        // $galleryFile->setOriginalFileUrl($album->getOriginalFileUrl() . $driveFile->getOriginalFilename());
         $galleryFile->setMimeType($driveFile->getMimeType());
         if ($playUrl && $galleryFile instanceof Movie) {
             $galleryFile->setPlayUrl($playUrl);
@@ -374,5 +418,41 @@ class GalleryService
         $this->galleryInfoMapper->save($galleryInfo);
 
         return true;
+    }
+
+    public function getPhotoStreamPage(GalleryInfo $galleryInfo, $pg = null)
+    {
+        $photoStream = new PhotoStream($galleryInfo);
+        $this->populatePhotoStream($photoStream, $pg);
+
+        return $photoStream->getPage($pg);
+    }
+
+    protected function populatePhotoStream(PhotoStream $photoStream, $pg = null)
+    {
+        // Get gallery files
+        $driveService = $this->createDriveService($photoStream->getGalleryInfo());
+        $albumIndex = $this->fetchAlbumIndex($driveService);
+
+        $cacheKey = $this->getGalleryStreamCacheKey($photoStream->getGalleryInfo());
+        if ($this->cache->contains($cacheKey)) {
+            $files = $this->cache->fetch($cacheKey);
+        } else {
+            $files = $this->fetchGalleryFiles($driveService, array(), $albumIndex);
+            $this->cache->save($cacheKey, $files, $this->cacheTtl);
+        }
+
+        // Order files in reverse chronological order.
+        uasort($files, function(GalleryFile $a, GalleryFile $b) {
+            return strcmp($b->getDate(), $a->getDate());
+        });
+
+        // Add to photo stream
+        $photoStream->appendFiles($files);
+    }
+
+    protected function getGalleryStreamCacheKey(GalleryInfo $galleryInfo)
+    {
+        return $galleryInfo->getGoogleUserId() . ':stream';
     }
 }
