@@ -3,3 +3,9 @@ FallbackResource /index.php
 <IfModule php5_module>
     php_value newrelic.appname "Drivegal"
 </IfModule>
+
+<Files apc.php>
+   Order Deny,Allow
+   Deny from all
+   Allow from 127.0.0.1 107.15.88.251
+</Files>
