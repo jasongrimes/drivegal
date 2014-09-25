@@ -1,4 +1,5 @@
 {% extends "layout.twig" %}
+{% block containerClass %}container-fluid{% endblock %}
 
 {% block title %}{{ albumTitle }} | {{ galleryName }}{% endblock %}
 
@@ -27,7 +28,7 @@
         </div>
     {% endif %}
 
-    {% include '_galleryHtml.twig' %}
+    {% include '_galleryHtmlNew.twig' %}
 
 {% endblock %}
 

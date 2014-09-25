@@ -64,21 +64,6 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return new Response($app['twig']->resolveTemplate($templates)->render(array('code' => $code, 'message' => $message)), $code);
 });
 
-/*
-// Test the error handler
-$app->get('/error/{code}/', function(Application $app, $code) {
-    // 404.html, or 40x.html, or 4xx.html, or error.html
-    $templates = array(
-        'errors/'.$code.'.html',
-        'errors/'.substr($code, 0, 2).'x.html',
-        'errors/'.substr($code, 0, 1).'xx.html',
-        'errors/default.html',
-    );
-
-    return new Response($app['twig']->resolveTemplate($templates)->render(array('code' => $code)), $code);
-});
-*/
-
 //
 // Controller: Home page.
 //
@@ -203,22 +188,6 @@ $app->match('/settings', function(Application $app, Request $request) {
 ->bind('settings')
 ;
 
-/*
-//
-// Controller: View a gallery's photostream
-//
-$app->get('/{gallery_slug}/stream/{pg}', function(Application $app, Request $request, GalleryInfo $galleryInfo, $pg) {
-    $galleryService = $app['gallery'];
-    $page = $galleryService->getPhotoStreamPage($galleryInfo, $pg);
-    return renderPhotoStreamPage($page, $app, $request, $galleryInfo);
-})
-->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
-->convert('galleryInfo', $galleryProvider)
-->value('pg', 1)
-->bind('stream-top')
-;
-*/
-
 //
 // Controller: View the top-level album list.
 //
@@ -243,7 +212,6 @@ $app->get('/{gallery_slug}/album/', function(Application $app, GalleryInfo $gall
 ->bind('album-list')
 ;
 
-
 //
 // Controller: View an album in a gallery
 //
@@ -255,16 +223,6 @@ $app->get('/{gallery_slug}/album/{album_path}/', function(Application $app, Gall
         $app['session']->getFlashBag()->add('error', 'Album "' . $album_path . '" not found.');
         return $app->redirect($app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())));
     }
-
-    /*
-    return $app['twig']->render('album.twig', array(
-        'galleryName' => $galleryInfo->getGalleryName(),
-        'albumTitle' => $albumContents->getTitle(),
-        'files' => $albumContents->getFiles(),
-        'subAlbums' => $albumContents->getSubAlbums(),
-        'breadcrumbs' => $albumContents->getBreadcrumbs(),
-    ));
-    */
 
     return $app['twig']->render('album.twig', array(
         'galleryName' => $galleryInfo->getGalleryName(),
@@ -278,10 +236,6 @@ $app->get('/{gallery_slug}/album/{album_path}/', function(Application $app, Gall
         'prevUrl' => '',
         'showLightboxPhoto' => '',
         'gallerySlug' => $galleryInfo->getSlug(),
-        /*
-        'albumUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
-        'streamUrl' => $app['url_generator']->generate('stream', array('gallery_slug' => $galleryInfo->getSlug())),
-        */
     ));
 })
 ->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash (we have to specify that manually since we override the default regex).
@@ -290,23 +244,6 @@ $app->get('/{gallery_slug}/album/{album_path}/', function(Application $app, Gall
 ->value('album_path', '')
 ->bind('album')
 ;
-
-/*
-//
-// Controller: View a gallery photo stream.
-//
-$app->get('/{gallery_slug}/', function(Application $app, GalleryInfo $galleryInfo) {
-    $albumContents = $app['gallery']->getAlbumContents($galleryInfo, '');
-    return $app['twig']->render('gallery.twig', array(
-        'galleryName' => $galleryInfo->getGalleryName(),
-        'subAlbums' => $albumContents->getSubAlbums(),
-    ));
-})
-->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
-->convert('galleryInfo', $galleryProvider)
-->bind('gallery')
-;
-*/
 
 //
 // Middleware: Determine the current user.
@@ -373,17 +310,6 @@ $app->get('/my-gallery', function(Application $app) {
 $app->get('/{gallery_slug}/{pagestr}', function(Application $app, Request $request, GalleryInfo $galleryInfo, $pagestr) {
     $pg = substr($pagestr, 4); // Strip out the leading "page" string.
     $page = $app['gallery']->getPhotoStreamPage($galleryInfo, $pg);
-    return renderPhotoStreamPage($page, $app, $request, $galleryInfo);
-})
-->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
-->assert('pagestr', '^page\d+')
-->convert('galleryInfo', $galleryProvider)
-->value('pagestr', 'page1')
-->bind('gallery')
-;
-
-function renderPhotoStreamPage(Drivegal\PhotoStreamPage $page, Application $app, Request $request, GalleryInfo $galleryInfo)
-{
     $nextUrl = $page->getNextPage()
         ? $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug(), 'pagestr' => 'page' . $page->getNextPage()))
         : '';
@@ -400,5 +326,11 @@ function renderPhotoStreamPage(Drivegal\PhotoStreamPage $page, Application $app,
         'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
         'showLightboxPhoto' => $request->query->get('show'),
     ));
-}
+})
+->assert('gallery_slug', '^[^_][^/]+') // slug can't start with an underscore or contain a slash.
+->assert('pagestr', '^page\d+')
+->convert('galleryInfo', $galleryProvider)
+->value('pagestr', 'page1')
+->bind('gallery')
+;
 
