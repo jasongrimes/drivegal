@@ -29,16 +29,16 @@
                 //
                 if (index == 0 && lastSlideIndex == links.length - 1) {
                     this.close();
-                    {% if nextUrl %}
+                    {% if paginator is defined and paginator.nextUrl %}
                         loading();
-                        document.location='{{ nextUrl }}?show=first';
+                        document.location='{{ paginator.nextUrl }}?show=first';
                     {% endif %}
                 }
                 if (index == links.length - 1 && lastSlideIndex == 0) {
                     this.close();
-                    {% if prevUrl %}
+                    {% if paginator is defined and paginator.prevUrl %}
                         loading();
-                        document.location='{{ prevUrl }}?show=last';
+                        document.location='{{ paginator.prevUrl }}?show=last';
                     {% endif %}
                 }
                 //
@@ -68,7 +68,8 @@
                 //
                 // Scroll the thumbnails down to the current image.
                 //
-                $('body').scrollTop($(links[index]).offset().top);
+                pos = $(links[index]).offset().top - ($(window).height() / 2);
+                $('html, body').animate({scrollTop: pos});
             },
             onopened: function() {
                 // $('#overlay').hide();

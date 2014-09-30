@@ -16,21 +16,26 @@
     <h3 style="float: left; padding-top: 5px; margin-right: 20px;">{{ galleryName }}</h3>
 
     <ul class="nav nav-pills" style="float: left; margin-bottom: 10px;">
-        <li class="active"><a href="{{ streamUrl }}">Photo Stream</a></li>
-        <li><a href="{{ albumUrl }}">Albums</a></li>
+        <li class="active"><a href="{{ url('gallery', { gallery_slug: gallerySlug }) }}">Photo Stream</a></li>
+        <li><a href="{{ url('album-list', { gallery_slug: gallerySlug }) }}">Albums</a></li>
     </ul>
+
+    <div style="float: right; padding-top: 5px;" class="hidden-xs">
+        {% include '_pagerSmall.twig' %}
+    </div>
+
     <div class="clearfix"></div>
 
     {% include '_galleryHtmlNew.twig' %}
 
-    <ul class="pager">
-        {% if prevUrl %}
-            <li><a href="{{ prevUrl }}">&larr; Previous</a></li>
-        {% endif %}
-        {% if nextUrl %}
-            <li><a href="{{ nextUrl }}">Next &rarr;</a></li>
-        {% endif %}
-    </ul>
+    <div style="margin-top: 20px;">
+        <div class="visible-xs">
+            {% include '_pagerSmall.twig' %}
+        </div>
+        <div class="hidden-xs">
+            {{ paginator|raw }}
+        </div>
+    </div>
 
 {% endblock %}
 

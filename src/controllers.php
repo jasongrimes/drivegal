@@ -12,6 +12,7 @@ use Drivegal\Authenticator;
 use Drivegal\Exception\AlbumNotFoundException;
 use Drivegal\Exception\ServiceAuthException;
 use Drivegal\Exception\ServiceException;
+use JasonGrimes\Paginator;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
@@ -232,8 +233,6 @@ $app->get('/{gallery_slug}/album/{album_path}/', function(Application $app, Gall
         'breadcrumbs' => $albumContents->getBreadcrumbs(),
         'albumUrl' => $app['url_generator']->generate('album-list', array('gallery_slug' => $galleryInfo->getSlug())),
         'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
-        'nextUrl' => '',
-        'prevUrl' => '',
         'showLightboxPhoto' => '',
         'gallerySlug' => $galleryInfo->getSlug(),
     ));
@@ -305,25 +304,25 @@ $app->get('/my-gallery', function(Application $app) {
 ->bind('my-gallery');
 
 //
-// Controller: View a gallery's photostream
+// Controller: View a gallery's photo stream
 //
 $app->get('/{gallery_slug}/{pagestr}', function(Application $app, Request $request, GalleryInfo $galleryInfo, $pagestr) {
     $pg = substr($pagestr, 4); // Strip out the leading "page" string.
-    $page = $app['gallery']->getPhotoStreamPage($galleryInfo, $pg);
-    $nextUrl = $page->getNextPage()
-        ? $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug(), 'pagestr' => 'page' . $page->getNextPage()))
-        : '';
-    $prevUrl = $page->getPrevPage()
-        ? $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug(), 'pagestr' => 'page' . $page->getPrevPage()))
-        : '';
+    $photoStream = $app['gallery']->getPhotoStream($galleryInfo); /** @var \Drivegal\PhotoStream $photoStream */
+    $photoStream->setPerPage(60);
+    $page = $photoStream->getPage($pg);
+    $paginator = new Paginator(
+        $photoStream->count(),
+        $photoStream->getPerPage(),
+        $pg,
+        $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())) . '/page(:num)'
+    );
 
     return $app['twig']->render('stream.twig', array(
         'galleryName' => $galleryInfo->getGalleryName(),
+        'gallerySlug' => $galleryInfo->getSlug(),
         'files' => $page->getFiles(),
-        'nextUrl' => $nextUrl,
-        'prevUrl' => $prevUrl,
-        'albumUrl' => $app['url_generator']->generate('album-list', array('gallery_slug' => $galleryInfo->getSlug())),
-        'streamUrl' => $app['url_generator']->generate('gallery', array('gallery_slug' => $galleryInfo->getSlug())),
+        'paginator' => $paginator,
         'showLightboxPhoto' => $request->query->get('show'),
     ));
 })

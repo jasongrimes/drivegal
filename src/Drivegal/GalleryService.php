@@ -424,10 +424,17 @@ class GalleryService
 
     public function getPhotoStreamPage(GalleryInfo $galleryInfo, $pg = null)
     {
-        $photoStream = new PhotoStream($galleryInfo);
-        $this->populatePhotoStream($photoStream, $pg);
+        $photoStream = $this->getPhotoStream($galleryInfo);
 
         return $photoStream->getPage($pg);
+    }
+
+    public function getPhotoStream(GalleryInfo $galleryInfo)
+    {
+        $photoStream = new PhotoStream($galleryInfo);
+        $this->populatePhotoStream($photoStream);
+
+        return $photoStream;
     }
 
     protected function populatePhotoStream(PhotoStream $photoStream, $pg = null)

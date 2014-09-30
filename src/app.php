@@ -90,6 +90,5 @@ $app->register(new CacheServiceProvider, array(
         "driver" => "apc"
     ))
 ));
-$app->register(new PaginationServiceProvider, array('pagination.per_page' => 100));
 
 return $app;

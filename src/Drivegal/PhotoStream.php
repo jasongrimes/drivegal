@@ -8,14 +8,28 @@ class PhotoStream
 {
     /** @var GalleryInfo */
     protected $galleryInfo;
-
     protected $files = array();
-
     protected $perPage = 60;
 
     public function __construct(GalleryInfo $galleryInfo)
     {
         $this->galleryInfo = $galleryInfo;
+    }
+
+    /**
+     * @param int $perPage
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPerPage()
+    {
+        return $this->perPage;
     }
 
     /**
@@ -71,5 +85,10 @@ class PhotoStream
     public function getFiles()
     {
         return $this->files;
+    }
+
+    public function count()
+    {
+        return count($this->files);
     }
 }

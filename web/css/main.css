@@ -157,6 +157,10 @@ ol.double-spaced li {
     overflow: hidden;
     float: left;
     margin: 2px;
+
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
 }
 .cropped-thumbnail img {
     min-height: 100%;
@@ -168,18 +172,22 @@ ol.double-spaced li {
     /* modern browsers */
     opacity: 0;
 }
-/* iPhone 5s landscape, fits 4 per row */
+/* iPhone 5s landscape */
 @media (min-width: 321px) {
+    /*
     .cropped-thumbnail {
         width: 130px;
         height: 130px;
     }
+    */
 }
 @media (min-width: 768px) {
+    /*
     .cropped-thumbnail {
         width: 165px;
         height: 165px;
     }
+    */
 }
 .cropped-thumbnail .play-button {
     display: none;
