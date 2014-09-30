@@ -4,10 +4,14 @@ $(function() {
     });
     $('.paginator-select-page')
         .on('focus', function() {
-            $(this).css('font-size', '16px');
+            if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+                $(this).css('font-size', '16px');
+            }
         })
         .on('blur', function() {
-            $(this).css('font-size', '');
+            if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+                $(this).css('font-size', '');
+            }
         })
     ;
 });
