@@ -2,7 +2,7 @@
     <div class="input-group" style="width: 1px;">
         {% if paginator.prevUrl %}
             <span class="input-group-btn">
-                <a href="{{ paginator.prevUrl }}" class="btn btn-default" type="button">&laquo; Prev</a>
+                <a href="{{ paginator.prevUrl }}" class="btn btn-default" type="button">{{ (label_prev|default('&laquo; Prev'))|raw }}</a>
             </span>
         {% endif %}
 
@@ -10,7 +10,7 @@
             {% for page in paginator.pages %}
                 {% if page.url %}
                     <option value="{{ page.url }}"{{ page.isCurrent ? 'selected' : '' }}>
-                        Page {{ page.num }}
+                        {{ (label_page_prefix|default('Page'))|raw }} {{ page.num }}
                     </option>
                 {% else %}
                     <option disabled>{{ page.num }}</option>
@@ -20,7 +20,7 @@
 
         {% if paginator.nextUrl %}
             <span class="input-group-btn">
-                <a href="{{ paginator.nextUrl }}" class="btn btn-default" type="button">Next &raquo;</a>
+                <a href="{{ paginator.nextUrl }}" class="btn btn-default" type="button">{{ (label_next|default('Next &raquo;'))|raw }}</a>
             </span>
         {% endif %}
     </div>
@@ -31,6 +31,15 @@
         $('.paginator-select-page').on('change', function() {
             document.location = $(this).val();
         });
+        // To prevent iOS from zooming the page when clicking the select list, include the following workaround:
+        $('.paginator-select-page')
+            .on('focus', function() {
+                $(this).css('font-size', '16px');
+            })
+            .on('blur', function() {
+                $(this).css('font-size', '');
+            })
+        ;
     });
 #}
 

@@ -20,8 +20,13 @@
         <li><a href="{{ url('album-list', { gallery_slug: gallerySlug }) }}">Albums</a></li>
     </ul>
 
-    <div style="float: right; padding-top: 5px;" class="hidden-xs">
-        {% include '_pagerSmall.twig' %}
+    <div style="float: right; padding-top: 5px;">
+        <div class="visible-xs" style="position: absolute; right: 15px;">
+            {% include '_pagerSmall.twig' with { 'label_prev': '&laquo;', 'label_next': '&raquo;', 'label_page_prefix': '<span></span>'} %}
+        </div>
+        <div class="hidden-xs">
+            {% include '_pagerSmall.twig' %}
+        </div>
     </div>
 
     <div class="clearfix"></div>
