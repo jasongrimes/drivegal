@@ -140,7 +140,6 @@ class GalleryService
         $breadcrumbs = array();
 
         $path = $galleryInfo->getSlug() . '/album/';
-        // $breadcrumbs[$path] = $galleryInfo->getGalleryName();
         $breadcrumbs[$path] = 'Albums';
 
         $albumSlugs = explode('/', $albumPath);
@@ -149,7 +148,7 @@ class GalleryService
         $partialAlbumPath = '';
         foreach ($albumSlugs as $albumSlug) {
             $partialAlbumPath .= $albumSlug . '/';
-            $path .= $partialAlbumPath;
+            $path .= basename($partialAlbumPath) . '/';
 
             $album = $albumIndex->findByPath($partialAlbumPath);
             if ($album) {
